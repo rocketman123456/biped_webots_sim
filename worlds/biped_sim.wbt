@@ -5,11 +5,11 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 
 WorldInfo {
-  basicTimeStep 2
+  basicTimeStep 1
 }
 Viewpoint {
   orientation -0.16420163200595234 0.0734077624570957 0.9836915799464914 2.3129851580493623
-  position 1.028757398918591 -0.9503103009423615 0.7255891619099991
+  position 1.5723715096689328 -1.557751699145889 1.0055330709075072
 }
 TexturedBackground {
 }

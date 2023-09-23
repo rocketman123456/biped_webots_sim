@@ -2,7 +2,7 @@
 # license: Apache License 2.0
 # license url: http://www.apache.org/licenses/LICENSE-2.0
 # This is a proto file for Webots for the PAI-urdf
-# Extracted from: /home/robotsky/Program/WebotsSim/proto/PAI-urdf/urdf/PAI-urdf.urdf
+# Extracted from: urdf/PAI-urdf.urdf
 
 PROTO PAI-urdf [
   field  SFVec3f     translation     0 0 0
@@ -32,7 +32,7 @@ PROTO PAI-urdf [
           metalness 0
         }
         geometry DEF base_link Mesh {
-          url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/base_link.STL"
+          url "meshes/base_link.STL"
         }
       }
       HingeJoint {
@@ -58,7 +58,7 @@ PROTO PAI-urdf [
                 metalness 0
               }
               geometry DEF left-hip-abad Mesh {
-                url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-abad.STL"
+                url "meshes/left-hip-abad.STL"
               }
             }
             HingeJoint {
@@ -84,7 +84,7 @@ PROTO PAI-urdf [
                       metalness 0
                     }
                     geometry DEF left-hip-yaw Mesh {
-                      url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-yaw.STL"
+                      url "meshes/left-hip-yaw.STL"
                     }
                   }
                   HingeJoint {
@@ -108,7 +108,7 @@ PROTO PAI-urdf [
                             metalness 0
                           }
                           geometry DEF left-hip-pitch Mesh {
-                            url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-pitch.STL"
+                            url "meshes/left-hip-pitch.STL"
                           }
                         }
                         HingeJoint {
@@ -134,7 +134,7 @@ PROTO PAI-urdf [
                                   metalness 0
                                 }
                                 geometry DEF left-knee Mesh {
-                                  url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-knee.STL"
+                                  url "meshes/left-knee.STL"
                                 }
                               }
                               HingeJoint {
@@ -160,7 +160,7 @@ PROTO PAI-urdf [
                                         metalness 0
                                       }
                                       geometry DEF left-ankle Mesh {
-                                        url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-ankle.STL"
+                                        url "meshes/left-ankle.STL"
                                       }
                                     }
                                   ]
@@ -256,7 +256,7 @@ PROTO PAI-urdf [
                 metalness 0
               }
               geometry DEF right-hip-abad Mesh {
-                url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-abad.STL"
+                url "meshes/right-hip-abad.STL"
               }
             }
             HingeJoint {
@@ -282,7 +282,7 @@ PROTO PAI-urdf [
                       metalness 0
                     }
                     geometry DEF right-hip-yaw Mesh {
-                      url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-yaw.STL"
+                      url "meshes/right-hip-yaw.STL"
                     }
                   }
                   HingeJoint {
@@ -306,7 +306,7 @@ PROTO PAI-urdf [
                             metalness 0
                           }
                           geometry DEF right-hip-pitch Mesh {
-                            url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-pitch.STL"
+                            url "meshes/right-hip-pitch.STL"
                           }
                         }
                         HingeJoint {
@@ -332,7 +332,7 @@ PROTO PAI-urdf [
                                   metalness 0
                                 }
                                 geometry DEF right-knee Mesh {
-                                  url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-knee.STL"
+                                  url "meshes/right-knee.STL"
                                 }
                               }
                               HingeJoint {
@@ -358,7 +358,7 @@ PROTO PAI-urdf [
                                         metalness 0
                                       }
                                       geometry DEF right-ankle Mesh {
-                                        url "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-ankle.STL"
+                                        url "meshes/right-ankle.STL"
                                       }
                                     }
                                   ]
