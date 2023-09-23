@@ -1,0 +1,494 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+
+WorldInfo {
+  basicTimeStep 2
+}
+Viewpoint {
+  orientation -0.16420163200595234 0.0734077624570957 0.9836915799464914 2.3129851580493623
+  position 1.028757398918591 -0.9503103009423615 0.7255891619099991
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 10 10
+}
+Robot {
+  translation 0 0 0.35
+  children [
+    Shape {
+      appearance DEF base_link_material PBRAppearance {
+        roughness 1
+        metalness 0
+      }
+      geometry DEF base_link Mesh {
+        url [
+          "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/base_link.STL"
+        ]
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis -1 0 0
+        anchor 0 0.075 0
+      }
+      device [
+        RotationalMotor {
+          name "abad-L"
+          maxTorque 10000
+        }
+        PositionSensor {
+          name "abad-L_sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0 0.075 0
+        rotation -1 0 0 0
+        children [
+          Shape {
+            appearance DEF left-hip-abad_material PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry DEF left-hip-abad Mesh {
+              url [
+                "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-abad.STL"
+              ]
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 0 1
+              anchor 0.049 0 -0.0005
+            }
+            device [
+              RotationalMotor {
+                name "Yaw-L"
+                maxTorque 10000
+              }
+              PositionSensor {
+                name "Yaw-L_sensor"
+              }
+            ]
+            endPoint Solid {
+              translation 0.049 0 -0.0005
+              children [
+                Shape {
+                  appearance DEF left-hip-yaw_material PBRAppearance {
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry DEF left-hip-yaw Mesh {
+                    url [
+                      "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-yaw.STL"
+                    ]
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0 1 0
+                  }
+                  device [
+                    RotationalMotor {
+                      name "Pitch-L"
+                      maxTorque 10000
+                    }
+                    PositionSensor {
+                      name "Pitch-L_sensor"
+                    }
+                  ]
+                  endPoint Solid {
+                    rotation 0 1 0 0
+                    children [
+                      Shape {
+                        appearance DEF left-hip-pitch_material PBRAppearance {
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry DEF left-hip-pitch Mesh {
+                          url [
+                            "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-pitch.STL"
+                          ]
+                        }
+                      }
+                      HingeJoint {
+                        jointParameters HingeJointParameters {
+                          axis 0 1 0
+                          anchor 0 0 -0.15
+                        }
+                        device [
+                          RotationalMotor {
+                            name "Knee-L"
+                            maxTorque 10000
+                          }
+                          PositionSensor {
+                            name "Knee-L_sensor"
+                          }
+                        ]
+                        endPoint Solid {
+                          translation 0 0 -0.15
+                          rotation 0 1 0 0
+                          children [
+                            Shape {
+                              appearance DEF left-knee_material PBRAppearance {
+                                roughness 1
+                                metalness 0
+                              }
+                              geometry DEF left-knee Mesh {
+                                url [
+                                  "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-knee.STL"
+                                ]
+                              }
+                            }
+                            HingeJoint {
+                              jointParameters HingeJointParameters {
+                                axis 0 1 0
+                                anchor 0 0 -0.16
+                              }
+                              device [
+                                RotationalMotor {
+                                  name "Ankle-L"
+                                  maxTorque 10000
+                                }
+                                PositionSensor {
+                                  name "Ankle-L_sensor"
+                                }
+                              ]
+                              endPoint Solid {
+                                translation 0 0 -0.16
+                                rotation 0 1 0 0
+                                children [
+                                  Shape {
+                                    appearance DEF left-ankle_material PBRAppearance {
+                                      roughness 1
+                                      metalness 0
+                                    }
+                                    geometry DEF left-ankle Mesh {
+                                      url [
+                                        "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-ankle.STL"
+                                      ]
+                                    }
+                                  }
+                                ]
+                                name "left-ankle"
+                                boundingObject USE left-ankle
+                                physics Physics {
+                                  density -1
+                                  mass 0.09
+                                  centerOfMass [
+                                    0.010818 0 -0.014672
+                                  ]
+                                  inertiaMatrix [
+                                    2.76e-06 2.7107e-05 2.6942e-05
+                                    3.1498e-11 1.0465e-06 3.7297e-13
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                          name "left-knee"
+                          boundingObject USE left-knee
+                          physics Physics {
+                            density -1
+                            mass 0.36
+                            centerOfMass [
+                              -0.004596 0.012568 -0.063722
+                            ]
+                            inertiaMatrix [
+                              0.00011945 0.00012253 2.0036e-05
+                              6.4077e-08 3.3225e-07 1.2844e-07
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                    name "left-hip-pitch"
+                    boundingObject USE left-hip-pitch
+                    physics Physics {
+                      density -1
+                      mass 0.2
+                      centerOfMass [
+                        0 0 -0.05727
+                      ]
+                      inertiaMatrix [
+                        0.00012318 0.00012926 6.3186e-06
+                        3.9623e-20 -2.6324e-20 7.2271e-23
+                      ]
+                    }
+                  }
+                }
+              ]
+              name "left-hip-yaw"
+              boundingObject USE left-hip-yaw
+              physics Physics {
+                density -1
+                mass 0.65
+                centerOfMass [
+                  -0.000496 0 0.003295
+                ]
+                inertiaMatrix [
+                  6.7757e-05 6.8581e-05 6.7914e-05
+                  7.9552e-21 -6.395e-07 9.1346e-21
+                ]
+              }
+            }
+          }
+        ]
+        name "left-hip-abad"
+        boundingObject USE left-hip-abad
+        physics Physics {
+          density -1
+          mass 0.35
+          centerOfMass [
+            0.041409 0 0.055119
+          ]
+          inertiaMatrix [
+            3.6841e-05 3.8839e-05 3.6277e-05
+            -2.584e-22 -6.2162e-07 -1.9482e-21
+          ]
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis -1 0 0
+        anchor 0 -0.075 0
+      }
+      device [
+        RotationalMotor {
+          name "abad-R"
+          maxTorque 10000
+        }
+        PositionSensor {
+          name "abad-R_sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0 -0.075 0
+        rotation -1 0 0 0
+        children [
+          Shape {
+            appearance DEF right-hip-abad_material PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry DEF right-hip-abad Mesh {
+              url [
+                "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-abad.STL"
+              ]
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 0 1
+              anchor 0.049 0 -0.0005
+            }
+            device [
+              RotationalMotor {
+                name "Yaw-R"
+                maxTorque 10000
+              }
+              PositionSensor {
+                name "Yaw-R_sensor"
+              }
+            ]
+            endPoint Solid {
+              translation 0.049 0 -0.0005
+              children [
+                Shape {
+                  appearance DEF right-hip-yaw_material PBRAppearance {
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry DEF right-hip-yaw Mesh {
+                    url [
+                      "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-yaw.STL"
+                    ]
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0 -1 0
+                  }
+                  device [
+                    RotationalMotor {
+                      name "Pitch-R"
+                      maxTorque 10000
+                    }
+                    PositionSensor {
+                      name "Pitch-R_sensor"
+                    }
+                  ]
+                  endPoint Solid {
+                    rotation 0 -1 0 0
+                    children [
+                      Shape {
+                        appearance DEF right-hip-pitch_material PBRAppearance {
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry DEF right-hip-pitch Mesh {
+                          url [
+                            "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-pitch.STL"
+                          ]
+                        }
+                      }
+                      HingeJoint {
+                        jointParameters HingeJointParameters {
+                          axis 0 -1 0
+                          anchor 0 0 -0.15
+                        }
+                        device [
+                          RotationalMotor {
+                            name "Knee-R"
+                            maxTorque 10000
+                          }
+                          PositionSensor {
+                            name "Knee-R_sensor"
+                          }
+                        ]
+                        endPoint Solid {
+                          translation 0 0 -0.15
+                          rotation 0 -1 0 0
+                          children [
+                            Shape {
+                              appearance DEF right-knee_material PBRAppearance {
+                                roughness 1
+                                metalness 0
+                              }
+                              geometry DEF right-knee Mesh {
+                                url [
+                                  "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-knee.STL"
+                                ]
+                              }
+                            }
+                            HingeJoint {
+                              jointParameters HingeJointParameters {
+                                axis 0 -1 0
+                                anchor 0 0 -0.16
+                              }
+                              device [
+                                RotationalMotor {
+                                  name "Ankle-R"
+                                  maxTorque 10000
+                                }
+                                PositionSensor {
+                                  name "Ankle-R_sensor"
+                                }
+                              ]
+                              endPoint Solid {
+                                translation 0 0 -0.16
+                                rotation 0 -1 0 0
+                                children [
+                                  Shape {
+                                    appearance DEF right-ankle_material PBRAppearance {
+                                      roughness 1
+                                      metalness 0
+                                    }
+                                    geometry DEF right-ankle Mesh {
+                                      url [
+                                        "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-ankle.STL"
+                                      ]
+                                    }
+                                  }
+                                ]
+                                name "right-ankle"
+                                boundingObject USE right-ankle
+                                physics Physics {
+                                  density -1
+                                  mass 0.09
+                                  centerOfMass [
+                                    0.010818 0 -0.014672
+                                  ]
+                                  inertiaMatrix [
+                                    2.76e-06 2.7107e-05 2.6942e-05
+                                    3.1498e-11 1.0465e-06 3.7297e-13
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                          name "right-knee"
+                          boundingObject USE right-knee
+                          physics Physics {
+                            density -1
+                            mass 0.36
+                            centerOfMass [
+                              -0.004596 -0.012568 -0.063722
+                            ]
+                            inertiaMatrix [
+                              0.00011945 0.00012253 2.0036e-05
+                              -6.4077e-08 3.3225e-07 -1.2844e-07
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                    name "right-hip-pitch"
+                    boundingObject USE right-hip-pitch
+                    physics Physics {
+                      density -1
+                      mass 0.2
+                      centerOfMass [
+                        0 0 -0.05727
+                      ]
+                      inertiaMatrix [
+                        0.00012318 0.00012926 6.3186e-06
+                        3.9681e-20 -3.2905e-21 2.887e-20
+                      ]
+                    }
+                  }
+                }
+              ]
+              name "right-hip-yaw"
+              boundingObject USE right-hip-yaw
+              physics Physics {
+                density -1
+                mass 0.65
+                centerOfMass [
+                  -0.000496 0 0.003295
+                ]
+                inertiaMatrix [
+                  6.7757e-05 6.8581e-05 6.7914e-05
+                  -1.4631e-21 -6.395e-07 1.1283e-20
+                ]
+              }
+            }
+          }
+        ]
+        name "right-hip-abad"
+        boundingObject USE right-hip-abad
+        physics Physics {
+          density -1
+          mass 0.35
+          centerOfMass [
+            0.041409 0 0.055119
+          ]
+          inertiaMatrix [
+            3.6841e-05 3.8839e-05 3.6277e-05
+            2.4386e-22 -6.2162e-07 -2.348e-21
+          ]
+        }
+      }
+    }
+  ]
+  name "PAI-urdf"
+  boundingObject USE base_link
+  physics Physics {
+    density -1
+    mass 1.5
+    centerOfMass [
+      0.069429 0 0.093307
+    ]
+    inertiaMatrix [
+      0.0028787 0.0047606 0.0043029
+      -6.2028e-19 0.0011496 5.6278e-19
+    ]
+  }
+  controller "walk_controller"
+}
