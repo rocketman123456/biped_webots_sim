@@ -39,11 +39,11 @@ Robot {
       }
       device [
         RotationalMotor {
-          name "abad-L"
+          name "Roll-L"
           maxTorque 10000
         }
         PositionSensor {
-          name "abad-L_sensor"
+          name "Roll-L_sensor"
         }
       ]
       endPoint Solid {
@@ -261,11 +261,11 @@ Robot {
       }
       device [
         RotationalMotor {
-          name "abad-R"
+          name "Roll-R"
           maxTorque 10000
         }
         PositionSensor {
-          name "abad-R_sensor"
+          name "Roll-R_sensor"
         }
       ]
       endPoint Solid {
