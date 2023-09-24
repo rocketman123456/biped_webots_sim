@@ -28,7 +28,7 @@ Robot {
       }
       geometry DEF base_link Mesh {
         url [
-          "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/base_link.STL"
+          "../protos/meshes/base_link.STL"
         ]
       }
     }
@@ -57,7 +57,7 @@ Robot {
             }
             geometry DEF left-hip-abad Mesh {
               url [
-                "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-abad.STL"
+                "../protos/meshes/left-hip-abad.STL"
               ]
             }
           }
@@ -85,7 +85,7 @@ Robot {
                   }
                   geometry DEF left-hip-yaw Mesh {
                     url [
-                      "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-yaw.STL"
+                      "../protos/meshes/left-hip-yaw.STL"
                     ]
                   }
                 }
@@ -112,7 +112,7 @@ Robot {
                         }
                         geometry DEF left-hip-pitch Mesh {
                           url [
-                            "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-hip-pitch.STL"
+                            "../protos/meshes/left-hip-pitch.STL"
                           ]
                         }
                       }
@@ -141,7 +141,7 @@ Robot {
                               }
                               geometry DEF left-knee Mesh {
                                 url [
-                                  "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-knee.STL"
+                                  "../protos/meshes/left-knee.STL"
                                 ]
                               }
                             }
@@ -170,7 +170,7 @@ Robot {
                                     }
                                     geometry DEF left-ankle Mesh {
                                       url [
-                                        "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/left-ankle.STL"
+                                        "../protos/meshes/left-ankle.STL"
                                       ]
                                     }
                                   }
@@ -279,7 +279,7 @@ Robot {
             }
             geometry DEF right-hip-abad Mesh {
               url [
-                "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-abad.STL"
+                "../protos/meshes/right-hip-abad.STL"
               ]
             }
           }
@@ -307,7 +307,7 @@ Robot {
                   }
                   geometry DEF right-hip-yaw Mesh {
                     url [
-                      "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-yaw.STL"
+                      "../protos/meshes/right-hip-yaw.STL"
                     ]
                   }
                 }
@@ -334,7 +334,7 @@ Robot {
                         }
                         geometry DEF right-hip-pitch Mesh {
                           url [
-                            "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-hip-pitch.STL"
+                            "../protos/meshes/right-hip-pitch.STL"
                           ]
                         }
                       }
@@ -363,7 +363,7 @@ Robot {
                               }
                               geometry DEF right-knee Mesh {
                                 url [
-                                  "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-knee.STL"
+                                  "../protos/meshes/right-knee.STL"
                                 ]
                               }
                             }
@@ -392,7 +392,7 @@ Robot {
                                     }
                                     geometry DEF right-ankle Mesh {
                                       url [
-                                        "/home/robotsky/Program/WebotsSim/proto/PAI-urdf/meshes/right-ankle.STL"
+                                        "../protos/meshes/right-ankle.STL"
                                       ]
                                     }
                                   }
