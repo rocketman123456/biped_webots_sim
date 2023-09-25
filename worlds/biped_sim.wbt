@@ -8,8 +8,8 @@ WorldInfo {
   basicTimeStep 1
 }
 Viewpoint {
-  orientation -0.16420163200595234 0.0734077624570957 0.9836915799464914 2.3129851580493623
-  position 1.5723715096689328 -1.557751699145889 1.0055330709075072
+  orientation -0.21322314132805745 -0.06938355194256392 0.9745367179958017 3.755778188682207
+  position 1.1345072043378264 0.8067012661803604 0.8679423829859354
 }
 TexturedBackground {
 }
@@ -21,6 +21,10 @@ RectangleArena {
 Robot {
   translation 0 0 0.35
   children [
+    Accelerometer {
+    }
+    Gyro {
+    }
     Shape {
       appearance DEF base_link_material PBRAppearance {
         roughness 1
