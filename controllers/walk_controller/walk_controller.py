@@ -8,11 +8,8 @@ from random import random
 import numpy as np
 import sys
 
-sys.path.append('./walking')
-from kinematics import *
-from foot_step_planner import *
-from preview_control import *
-from walking import *
+from walking.walking import *
+from walking.preview_control import *
 
 # create the Robot instance.
 robot = Robot()
@@ -75,7 +72,7 @@ joint_angles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 joint_dirs = [1, -1, -1, -1, -1, 1, -1, -1, -1, -1]
 name = "PAI"
 
-pc = preview_control(0.01, 1.0, z)
+pc = preview_control(0.01, 0.05, z)
 walk = walking(left_foot, right_foot, joint_angles, pc, name)
 foot_step = walk.setGoalPos([1.5, 0.0, 0])
 
@@ -89,34 +86,32 @@ step = 0
 # - perform simulation steps until Webots is stopping the controller
 while robot.step(timestep) != -1:
     # Read the sensors:
-    # Enter here functions to read sensor data, like:
     # val_L2 = sensor_L2.getValue()
     # val_R2 = sensor_R2.getValue()
     # acc = accelerometer.getValues()
     # w = gyro.getValues()
     # print(f"{val_L2}, {val_R2}")
     # print(f"{acc}, {w}")
-    j += 1
-    if j >= 10:
-        joint_angles, lf, rf, xp, n = walk.getNextPos()
-        # joint_angles_recorder = np.row_stack((joint_angles_recorder, np.array(joint_angles)))
-        # print(f'\n-> {step}_joint_angles is:{joint_angles}/{lf}/{rf}/{n}\n')
-        j = 0
-        if n == 0:
-            if (len(foot_step) <= 5):
-                x_goal, y_goal, th = random()-0.5, random()-0.5, random()-0.5
-                break
-                foot_step = walk.setGoalPos([x_goal, y_goal, th])
-            else:
-                # print("\n\n ==n is null==\n")
-                foot_step = walk.setGoalPos()
+    # j += 1
+    # if j >= 10:
+    #     joint_angles, lf, rf, xp, n = walk.getNextPos()
+    #     # joint_angles_recorder = np.row_stack((joint_angles_recorder, np.array(joint_angles)))
+    #     # print(f'\n-> {step}_joint_angles is:{joint_angles}/{lf}/{rf}/{n}\n')
+    #     j = 0
+    #     if n == 0:
+    #         if (len(foot_step) <= 5):
+    #             x_goal, y_goal, th = random()-0.5, random()-0.5, random()-0.5
+    #             # break
+    #             foot_step = walk.setGoalPos([x_goal, y_goal, th])
+    #         else:
+    #             # print("\n\n ==n is null==\n")
+    #             foot_step = walk.setGoalPos()
 
     # Process sensor data here.
 
     # Enter here functions to send actuator commands, like:
-    #  motor.setPosition(10.0)
-    for i in range(10):
-        motor[i].setPosition(joint_dirs[i] * joint_angles[i])
+    # for i in range(10):
+    #     motor[i].setPosition(joint_dirs[i] * joint_angles[i])
 
     step += 1
     pass

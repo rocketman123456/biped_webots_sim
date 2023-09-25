@@ -6,8 +6,8 @@ import pybullet as p
 import numpy as np
 import csv
 import time
-from mos_leg_ik import *
-from foot_step_planner import *
+from walking.mos_leg_ik import *
+from walking.foot_step_planner import *
 
 class walking():
     def __init__(self, left_foot0, right_foot0, joint_angles, pc, name="MOS"):
