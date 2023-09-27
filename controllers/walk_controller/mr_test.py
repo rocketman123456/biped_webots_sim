@@ -4,9 +4,7 @@ from modern_robotics.utils import *
 from modern_robotics.ch03 import *
 from modern_robotics.ch04 import *
 
-if __name__ == '__main__':
-    print(NearZero(10))
-
+def test_fk():
     L0 = 0.05
     L1 = 0.15
     L2 = 0.15
@@ -29,3 +27,8 @@ if __name__ == '__main__':
 
     T = FKinSpace(M, np.array([S1, S2, S3]).T, theta)
     print(T)
+
+if __name__ == '__main__':
+    print(NearZero(10))
+
+    test_fk()

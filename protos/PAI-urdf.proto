@@ -32,7 +32,7 @@ PROTO PAI-urdf [
           metalness 0
         }
         geometry DEF base_link Mesh {
-          url "meshes/base_link.STL"
+          url "meshes/base_link_opt.stl"
         }
       }
       HingeJoint {
