@@ -32,7 +32,7 @@ Robot {
       }
       geometry DEF base_link Mesh {
         url [
-          "../protos/meshes/base_link_opt.stl"
+          "../protos/meshes/base_link.STL"
         ]
       }
     }

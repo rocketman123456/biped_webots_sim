@@ -28,6 +28,12 @@ motor_L3 = robot.getDevice('Pitch-L')
 motor_L4 = robot.getDevice('Knee-L')
 motor_L5 = robot.getDevice('Ankle-L')
 
+motor_L1_dir = -1.0
+motor_L2_dir = 1.0
+motor_L3_dir = 1.0
+motor_L4_dir = 1.0
+motor_L5_dir = 1.0
+
 sensor_L1 = robot.getDevice('Roll-L_sensor')
 sensor_L2 = robot.getDevice('Yaw-L_sensor')
 sensor_L3 = robot.getDevice('Pitch-L_sensor')
@@ -39,6 +45,12 @@ motor_R2 = robot.getDevice('Yaw-R')
 motor_R3 = robot.getDevice('Pitch-R')
 motor_R4 = robot.getDevice('Knee-R')
 motor_R5 = robot.getDevice('Ankle-R')
+
+motor_R1_dir = -1.0
+motor_R2_dir = 1.0
+motor_R3_dir = -1.0
+motor_R4_dir = -1.0
+motor_R5_dir = -1.0
 
 sensor_R1 = robot.getDevice('Roll-R_sensor')
 sensor_R2 = robot.getDevice('Yaw-R_sensor')
@@ -77,8 +89,8 @@ walk = walking(left_foot, right_foot, joint_angles, pc, name)
 foot_step = walk.setGoalPos([1.5, 0.0, 0])
 
 # wait a moment
-for i in range(100):
-    robot.step(timestep)
+# for i in range(100):
+    # robot.step(timestep)
 
 j = 0
 step = 0
@@ -112,6 +124,7 @@ while robot.step(timestep) != -1:
     # Enter here functions to send actuator commands, like:
     # for i in range(10):
     #     motor[i].setPosition(joint_dirs[i] * joint_angles[i])
+    motor_R5.setPosition(0.5)
 
     step += 1
     pass
