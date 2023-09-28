@@ -10,6 +10,7 @@ import sys
 
 from walking.walking import *
 from walking.preview_control import *
+from motor_sim import *
 
 # create the Robot instance.
 robot = Robot()
@@ -58,19 +59,19 @@ sensor_R3 = robot.getDevice('Pitch-R_sensor')
 sensor_R4 = robot.getDevice('Knee-R_sensor')
 sensor_R5 = robot.getDevice('Ankle-R_sensor')
 
-sensor_L1.enable(timestep)
-sensor_L2.enable(timestep)
-sensor_L3.enable(timestep)
-sensor_L4.enable(timestep)
-sensor_L5.enable(timestep)
+motor_sim_L1 = motor_sim(motor_L1, sensor_L1, motor_L1_dir, timesetp)
+motor_sim_L2 = motor_sim(motor_L2, sensor_L2, motor_L2_dir, timesetp)
+motor_sim_L3 = motor_sim(motor_L3, sensor_L3, motor_L3_dir, timesetp)
+motor_sim_L4 = motor_sim(motor_L4, sensor_L4, motor_L4_dir, timesetp)
+motor_sim_L5 = motor_sim(motor_L5, sensor_L5, motor_L5_dir, timesetp)
 
-sensor_R1.enable(timestep)
-sensor_R2.enable(timestep)
-sensor_R3.enable(timestep)
-sensor_R4.enable(timestep)
-sensor_R5.enable(timestep)
+motor_sim_R1 = motor_sim(motor_R1, sensor_R1, motor_R1_dir, timesetp)
+motor_sim_R2 = motor_sim(motor_R2, sensor_R2, motor_R2_dir, timesetp)
+motor_sim_R3 = motor_sim(motor_R3, sensor_R3, motor_R3_dir, timesetp)
+motor_sim_R4 = motor_sim(motor_R4, sensor_R4, motor_R4_dir, timesetp)
+motor_sim_R5 = motor_sim(motor_R5, sensor_R5, motor_R5_dir, timesetp)
 
-motor = [motor_R1, motor_R2, motor_R3, motor_R4, motor_R5, motor_L1, motor_L2, motor_L3, motor_L4, motor_L5]
+# motor = [motor_R1, motor_R2, motor_R3, motor_R4, motor_R5, motor_L1, motor_L2, motor_L3, motor_L4, motor_L5]
 
 accelerometer = robot.getDevice('accelerometer')
 accelerometer.enable(timestep)
@@ -124,7 +125,16 @@ while robot.step(timestep) != -1:
     # Enter here functions to send actuator commands, like:
     # for i in range(10):
     #     motor[i].setPosition(joint_dirs[i] * joint_angles[i])
-    motor_R5.setPosition(0.5)
+    # motor_R5.setPosition(0.5)
+    motor_sim_L3.setPosition(-0.4)
+    motor_sim_L4.setPosition(0.8)
+    motor_sim_L5.setPosition(-0.4)
+
+    motor_sim_R3.setPosition(-0.4)
+    motor_sim_R4.setPosition(0.8)
+    motor_sim_R5.setPosition(-0.4)
+
+    print(f"{motor_sim_L5.getTorque()}, {motor_sim_R5.getTorque()}")
 
     step += 1
     pass
