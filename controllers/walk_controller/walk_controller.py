@@ -80,8 +80,8 @@ L3 = 0.02 # 0.045
 SL1 = np.array([1, 0, 0, 0, 0, 0])
 SL2 = np.array([0, 0, 1, 0, 0, 0])
 SL3 = np.array([0, 1, 0, 0, 0, 0])
-SL4 = np.array([0, 1, 0, 0, 0, L1])
-SL5 = np.array([0, 1, 0, 0, 0, L1+L2])
+SL4 = np.array([0, 1, 0, L1, 0, 0])
+SL5 = np.array([0, 1, 0, L1+L2, 0, 0])
 
 SL = np.array([SL1, SL2, SL3, SL4, SL5]).T
 
@@ -104,8 +104,8 @@ thetaL = np.array([0, 0, -0.3, 0.6, -0.3])
 SR1 = np.array([1, 0, 0, 0, 0, 0])
 SR2 = np.array([0, 0, 1, 0, 0, 0])
 SR3 = np.array([0, 1, 0, 0, 0, 0])
-SR4 = np.array([0, 1, 0, 0, 0, L1])
-SR5 = np.array([0, 1, 0, 0, 0, L1+L2])
+SR4 = np.array([0, 1, 0, L1, 0, 0])
+SR5 = np.array([0, 1, 0, L1+L2, 0, 0])
 
 SR = np.array([SR1, SR2, SR3, SR4, SR5]).T
 
@@ -126,21 +126,13 @@ TR = np.array([
 thetaR = np.array([0, 0, -0.3, 0.6, -0.3])
 
 W = np.array([
-    [1, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 1, 0],
-    [0, 0, 0, 0, 0, 1]
-]) * 0.8
-
-W2 = np.array([
-    [1, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 0, 1, 0],
-    [0, 0, 0, 0, 1]
-]) * 0.8
+    [0.1,   0,   0,   0,   0,   0],
+    [  0, 0.1,   0,   0,   0,   0],
+    [  0,   0, 0.1,   0,   0,   0],
+    [  0,   0,   0, 0.4,   0,   0],
+    [  0,   0,   0,   0, 0.4,   0],
+    [  0,   0,   0,   0,   0, 0.4]
+])
 
 posL = FKinSpace(ML, SL, thetaL)
 posR = FKinSpace(MR, SR, thetaR)
@@ -149,10 +141,10 @@ print(posR)
 
 # thetaL1, errL = IKinSpace(SL, ML, TL, thetaL, 0.01, 0.001)
 # thetaR1, errR = IKinSpace(SR, MR, TR, thetaR, 0.01, 0.001)
-thetaL1, errL = IKinSpacePseudoInverse(SL, ML, TL, thetaL, 0.01, 0.001)
-thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.001, W, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
+# thetaL1, errL = IKinSpacePseudoInverse(SL, ML, TL, thetaL, 0.01, 0.001)
+# thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
+thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.001, W, 0.01, 0.001)
+thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
 # thetaL1, errL = IKinSpaceDampedLeastSquare2(SL, ML, TL, thetaL, 0.001, W, 0.1, 0.01, 0.001)
 # thetaR1, errR = IKinSpaceDampedLeastSquare2(SR, MR, TR, thetaR, 0.001, W, 0.1, 0.01, 0.001)
 # thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.001, 0.8, 0.01, 0.001)
@@ -162,6 +154,11 @@ thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
 
 print(f"{errL}, {thetaL1}")
 print(f"{errR}, {thetaR1}")
+
+posL = FKinSpace(ML, SL, thetaL1)
+posR = FKinSpace(MR, SR, thetaR1)
+print(posL)
+print(posR)
 
 for i in range(5):
     motorsL[i].setPosition(thetaL1[i])
