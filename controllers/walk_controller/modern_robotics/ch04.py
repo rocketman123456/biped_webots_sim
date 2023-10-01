@@ -56,7 +56,7 @@ def FKinBody(M, Blist, thetalist):
     """
     T = np.array(M)
     for i in range(len(thetalist)):
-        T = np.dot(T, MatrixExp6(VecTose3(np.array(Blist)[:, i] * thetalist[i])))
+        T = T @ MatrixExp6(VecTose3(np.array(Blist)[:, i] * thetalist[i]))
     return T
 
 
@@ -90,5 +90,5 @@ def FKinSpace(M, Slist, thetalist):
     """
     T = np.array(M)
     for i in range(len(thetalist) - 1, -1, -1):
-        T = np.dot(MatrixExp6(VecTose3(np.array(Slist)[:, i] * thetalist[i])), T)
+        T = MatrixExp6(VecTose3(np.array(Slist)[:, i] * thetalist[i])) @ T
     return T

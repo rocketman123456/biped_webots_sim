@@ -1,10 +1,9 @@
-"""walk_controller controller."""
-
 from controller import Robot, Motor
 from math import *
 import numpy as np
 import sys
 
+from modern_robotics.ch04 import *
 from modern_robotics.ch06 import *
 from motor_sim import *
 from leg_sim import *
@@ -135,14 +134,29 @@ W = np.array([
     [0, 0, 0, 0, 0, 1]
 ]) * 0.8
 
-# thetaL1, errL = IKinSpacePseudoInverse(SL, ML, TL, thetaL, 0.01, 0.001)
-# thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
+W2 = np.array([
+    [1, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1]
+]) * 0.8
+
+posL = FKinSpace(ML, SL, thetaL)
+posR = FKinSpace(MR, SR, thetaR)
+print(posL)
+print(posR)
+
 # thetaL1, errL = IKinSpace(SL, ML, TL, thetaL, 0.01, 0.001)
 # thetaR1, errR = IKinSpace(SR, MR, TR, thetaR, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.001, W, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
-thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.001, 0.8, 0.01, 0.001)
-thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.001, 0.8, 0.01, 0.001)
+# thetaL1, errL = IKinSpacePseudoInverse(SL, ML, TL, thetaL, 0.01, 0.001)
+# thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
+thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.001, W, 0.01, 0.001)
+thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
+# thetaL1, errL = IKinSpaceDampedLeastSquare2(SL, ML, TL, thetaL, 0.001, W, 0.1, 0.01, 0.001)
+# thetaR1, errR = IKinSpaceDampedLeastSquare2(SR, MR, TR, thetaR, 0.001, W, 0.1, 0.01, 0.001)
+# thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.001, 0.8, 0.01, 0.001)
+# thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.001, 0.8, 0.01, 0.001)
 # thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.1, 0.01, 0.001)
 # thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.1, 0.01, 0.001)
 

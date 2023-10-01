@@ -372,13 +372,13 @@ def MatrixLog6(T):
     if np.array_equal(omgmat, np.zeros((3, 3))):
         return np.r_[np.c_[np.zeros((3, 3)),
                            [T[0][3], T[1][3], T[2][3]]],
-                     [[0, 0, 0, 0]]]
+                        [[0, 0, 0, 0]]]
     else:
         theta = np.arccos((np.trace(R) - 1) / 2.0)
         return np.r_[np.c_[omgmat,
-                           np.dot(np.eye(3) - omgmat / 2.0
-                                  + (1.0 / theta - 1.0 / np.tan(theta / 2.0) / 2)
-                                  * np.dot(omgmat, omgmat) / theta, [T[0][3], T[1][3], T[2][3]])],
+                           np.dot(np.eye(3) - omgmat / 2.0 \
+                                + (1.0 / theta - 1.0 / np.tan(theta / 2.0) / 2) \
+                                * np.dot(omgmat, omgmat) / theta,[T[0][3], T[1][3], T[2][3]])],
                      [[0, 0, 0, 0]]]
 
 

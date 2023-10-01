@@ -28,6 +28,7 @@ from modern_robotics.ch05 import *
 *** CHAPTER 6: INVERSE KINEMATICS ***
 '''
 
+
 def IKinBody(Blist, M, T, thetalist0, eomg, ev):
     """Computes inverse kinematics in the body frame for an open chain robot
 
@@ -76,14 +77,15 @@ def IKinBody(Blist, M, T, thetalist0, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+    Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
-        thetalist = thetalist + np.dot(np.linalg.pinv(JacobianBody(Blist, thetalist)), Vb)
+        thetalist = thetalist + np.linalg.pinv(JacobianBody(Blist, thetalist)) @ Vb
         i = i + 1
-        Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+        Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinSpace(Slist, M, T, thetalist0, eomg, ev):
     """Computes inverse kinematics in the space frame for an open chain robot
@@ -133,38 +135,40 @@ def IKinSpace(Slist, M, T, thetalist0, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Tsb = FKinSpace(M,Slist, thetalist)
-    Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+    Tsb = FKinSpace(M, Slist, thetalist)
+    Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
-        thetalist = thetalist + np.dot(np.linalg.pinv(JacobianSpace(Slist, thetalist)), Vs)
+        thetalist = thetalist + np.linalg.pinv(JacobianSpace(Slist, thetalist)) @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
-        Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+        Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinBodyPseudoInverse(Blist, M, T, thetalist0, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+    Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         jacobian = JacobianBody(Blist, thetalist)
         jacobian_inv = jacobian.T @ np.linalg.pinv(jacobian @ jacobian.T)
         thetalist = thetalist + jacobian_inv @ Vb
         i = i + 1
-        Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+        Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinSpacePseudoInverse(Slist, M, T, thetalist0, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Tsb = FKinSpace(M,Slist, thetalist)
-    Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+    Tsb = FKinSpace(M, Slist, thetalist)
+    Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
         jacobian = JacobianSpace(Slist, thetalist)
@@ -172,59 +176,63 @@ def IKinSpacePseudoInverse(Slist, M, T, thetalist0, eomg, ev):
         thetalist = thetalist + jacobian_inv @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
-        Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+        Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinBodyDamped(Blist, M, T, thetalist0, lamb, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+    Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         thetalist = thetalist + lamb * np.linalg.pinv(JacobianBody(Blist, thetalist)) @ Vb
         i = i + 1
-        Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+        Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinSpaceDamped(Slist, M, T, thetalist0, lamb, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Tsb = FKinSpace(M,Slist, thetalist)
-    Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+    Tsb = FKinSpace(M, Slist, thetalist)
+    Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
         thetalist = thetalist + lamb * np.linalg.pinv(JacobianSpace(Slist, thetalist)) @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
-        Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+        Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinBodyDampedPseudoInverse(Blist, M, T, thetalist0, lamb1, lamb2, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+    Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         jacobian = JacobianBody(Blist, thetalist)
         jacobian_inv = jacobian.T @ np.linalg.pinv(jacobian @ jacobian.T + lamb1 * np.eye(np.size(jacobian, 0)))
         thetalist = thetalist + lamb2 * jacobian_inv @ Vb
         i = i + 1
-        Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+        Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinSpaceDampedPseudoInverse(Slist, M, T, thetalist0, lamb1, lamb2, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Tsb = FKinSpace(M,Slist, thetalist)
-    Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+    Tsb = FKinSpace(M, Slist, thetalist)
+    Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
         jacobian = JacobianSpace(Slist, thetalist)
@@ -232,16 +240,17 @@ def IKinSpaceDampedPseudoInverse(Slist, M, T, thetalist0, lamb1, lamb2, eomg, ev
         thetalist = thetalist + lamb2 * jacobian_inv @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
-        Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+        Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinBodyDampedLeastSquare1(Blist, M, T, thetalist0, lamb, W, eomg, ev):
     # W = np.eye(np.size(thetalist, 1)) + (w-1) @ d @ d.T
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+    Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         J = JacobianBody(Blist, thetalist)
@@ -249,56 +258,62 @@ def IKinBodyDampedLeastSquare1(Blist, M, T, thetalist0, lamb, W, eomg, ev):
         # JJT = J.T @ W.T @ W @ J + lamb * np.eye(thetalist.size)
         thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W @ Vb
         i = i + 1
-        Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+        Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinSpaceDampedLeastSquare1(Slist, M, T, thetalist0, lamb, W, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Tsb = FKinSpace(M,Slist, thetalist)
-    Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+    Tsb = FKinSpace(M, Slist, thetalist)
+    Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
+        print(Vs)
         J = JacobianSpace(Slist, thetalist)
         JJT = J.T @ W.T @ W @ J + lamb * np.eye(thetalist.size)
         thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
-        Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+        Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinBodyDampedLeastSquare2(Blist, M, T, thetalist0, lamb, W, dt, eomg, ev):
     # W = np.eye(np.size(thetalist, 1)) + (w-1) @ d @ d.T
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+    Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         J = JacobianBody(Blist, thetalist)
         JJT = W @ J @ J.T @ W + lamb * np.eye(thetalist.size)
         thetalist = thetalist + dt * W @ J.T @ np.linalg.pinv(JJT) @ W @ Vb
         i = i + 1
-        Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
+        Vb = se3ToVec(MatrixLog6(TransInv(FKinBody(M, Blist, thetalist)) @ T))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     return (thetalist, not err)
+
 
 def IKinSpaceDampedLeastSquare2(Slist, M, T, thetalist0, lamb, W, dt, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0
     maxiterations = 20
-    Tsb = FKinSpace(M,Slist, thetalist)
-    Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+    Tsb = FKinSpace(M, Slist, thetalist)
+    Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
         J = JacobianSpace(Slist, thetalist)
-        JJT = W @ J @ J.T @ W + lamb * np.eye(thetalist.size)
+        JJT = W @ J @ J.T @ W + lamb * np.eye(np.size(W, 0))
+        print(J.shape)
+        print(JJT.shape)
         thetalist = thetalist + dt * W @ J.T @ np.linalg.pinv(JJT) @ W @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
-        Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
+        Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     return (thetalist, not err)
