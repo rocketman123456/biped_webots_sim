@@ -152,8 +152,8 @@ def IKinBodyPseudoInverse(Blist, M, T, thetalist0, eomg, ev):
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         jacobian = JacobianBody(Blist, thetalist)
-        jacobian_inv = np.dot(jacobian.T, np.linalg.pinv(np.dot(jacobian, jacobian.T)))
-        thetalist = thetalist + np.dot(jacobian_inv, Vb)
+        jacobian_inv = jacobian.T @ np.linalg.pinv(jacobian @ jacobian.T)
+        thetalist = thetalist + jacobian_inv @ Vb
         i = i + 1
         Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
@@ -168,8 +168,8 @@ def IKinSpacePseudoInverse(Slist, M, T, thetalist0, eomg, ev):
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
         jacobian = JacobianSpace(Slist, thetalist)
-        jacobian_inv = np.dot(jacobian.T, np.linalg.pinv(np.dot(jacobian, jacobian.T)))
-        thetalist = thetalist + np.dot(jacobian_inv, Vs)
+        jacobian_inv = jacobian.T @ np.linalg.pinv(jacobian @ jacobian.T)
+        thetalist = thetalist + jacobian_inv @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
         Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))
@@ -247,7 +247,7 @@ def IKinBodyDampedLeastSquare1(Blist, M, T, thetalist0, lamb, W, eomg, ev):
         J = JacobianBody(Blist, thetalist)
         JJT = W @ J @ J.T @ W + lamb * np.eye(thetalist.size)
         # JJT = J.T @ W.T @ W @ J + lamb * np.eye(thetalist.size)
-        thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W.T @ W @ Vb
+        thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W @ Vb
         i = i + 1
         Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
@@ -263,7 +263,7 @@ def IKinSpaceDampedLeastSquare1(Slist, M, T, thetalist0, lamb, W, eomg, ev):
     while err and i < maxiterations:
         J = JacobianSpace(Slist, thetalist)
         JJT = J.T @ W.T @ W @ J + lamb * np.eye(thetalist.size)
-        thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W.T @ W @ Vs
+        thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
         Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))

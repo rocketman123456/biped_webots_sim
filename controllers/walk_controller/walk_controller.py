@@ -76,7 +76,7 @@ motorsR = [motor_sim_R1, motor_sim_R2, motor_sim_R3, motor_sim_R4, motor_sim_R5]
 L0 = 0.015 / 2.0
 L1 = 0.15
 L2 = 0.16
-L3 = 0.045
+L3 = 0.02 # 0.045
 
 SL1 = np.array([1, 0, 0, 0, 0, 0])
 SL2 = np.array([0, 0, 1, 0, 0, 0])
@@ -135,19 +135,19 @@ W = np.array([
     [0, 0, 0, 0, 0, 1]
 ]) * 0.8
 
-thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.3, 0.01, 0.001)
-thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.3, 0.01, 0.001)
+# thetaL1, errL = IKinSpacePseudoInverse(SL, ML, TL, thetaL, 0.01, 0.001)
+# thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
+# thetaL1, errL = IKinSpace(SL, ML, TL, thetaL, 0.01, 0.001)
+# thetaR1, errR = IKinSpace(SR, MR, TR, thetaR, 0.01, 0.001)
+# thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.01, W, 0.01, 0.001)
+# thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.01, W, 0.01, 0.001)
+# thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.8, 0.01, 0.001)
+# thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.8, 0.01, 0.001)
+thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.15, 0.01, 0.001)
+thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.15, 0.01, 0.001)
 
 print(f"{errL}, {thetaL1}")
 print(f"{errR}, {thetaR1}")
-
-motor_sim_L3.setPosition(-0.4)
-motor_sim_L4.setPosition(0.8)
-motor_sim_L5.setPosition(-0.4)
-
-motor_sim_R3.setPosition(-0.4)
-motor_sim_R4.setPosition(0.8)
-motor_sim_R5.setPosition(-0.4)
 
 for i in range(5):
     motorsL[i].setPosition(thetaL1[i])
