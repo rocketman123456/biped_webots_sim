@@ -100,7 +100,7 @@ TL = np.array([
     [0, 0, 0, 1]
 ])
 
-thetaL = np.array([0, 0, -0.2, 0.4, -0.2])
+thetaL = np.array([0, 0, -0.3, 0.6, -0.3])
 
 SR1 = np.array([1, 0, 0, 0, 0, 0])
 SR2 = np.array([0, 0, 1, 0, 0, 0])
@@ -124,7 +124,7 @@ TR = np.array([
     [0, 0, 0, 1]
 ])
 
-thetaR = np.array([0, 0, -0.2, 0.4, -0.2])
+thetaR = np.array([0, 0, -0.3, 0.6, -0.3])
 
 W = np.array([
     [1, 0, 0, 0, 0, 0],
@@ -143,8 +143,8 @@ W = np.array([
 # thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
 thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.001, 0.8, 0.01, 0.001)
 thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.001, 0.8, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.8, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.8, 0.01, 0.001)
+# thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.1, 0.01, 0.001)
+# thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.1, 0.01, 0.001)
 
 print(f"{errL}, {thetaL1}")
 print(f"{errR}, {thetaR1}")
