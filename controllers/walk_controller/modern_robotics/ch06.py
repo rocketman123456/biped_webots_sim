@@ -271,7 +271,6 @@ def IKinSpaceDampedLeastSquare1(Slist, M, T, thetalist0, lamb, W, eomg, ev):
     Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
-        print(Vs)
         J = JacobianSpace(Slist, thetalist)
         JJT = J.T @ W.T @ W @ J + lamb * np.eye(thetalist.size)
         thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W @ Vs
@@ -309,8 +308,6 @@ def IKinSpaceDampedLeastSquare2(Slist, M, T, thetalist0, lamb, W, dt, eomg, ev):
     while err and i < maxiterations:
         J = JacobianSpace(Slist, thetalist)
         JJT = W @ J @ J.T @ W + lamb * np.eye(np.size(W, 0))
-        print(J.shape)
-        print(JJT.shape)
         thetalist = thetalist + dt * W @ J.T @ np.linalg.pinv(JJT) @ W @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
