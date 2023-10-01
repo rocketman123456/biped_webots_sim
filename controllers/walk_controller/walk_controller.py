@@ -96,7 +96,7 @@ ML = np.array([
 TL = np.array([
     [1, 0, 0, 0],
     [0, 1, 0, 0],
-    [0, 0, 1, -0.25],
+    [0, 0, 1, -0.2],
     [0, 0, 0, 1]
 ])
 
@@ -120,7 +120,7 @@ MR = np.array([
 TR = np.array([
     [1, 0, 0, 0],
     [0, 1, 0, 0],
-    [0, 0, 1, -0.25],
+    [0, 0, 1, -0.2],
     [0, 0, 0, 1]
 ])
 
@@ -139,12 +139,12 @@ W = np.array([
 # thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
 # thetaL1, errL = IKinSpace(SL, ML, TL, thetaL, 0.01, 0.001)
 # thetaR1, errR = IKinSpace(SR, MR, TR, thetaR, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.01, W, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.01, W, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.8, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.8, 0.01, 0.001)
-thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.15, 0.01, 0.001)
-thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.15, 0.01, 0.001)
+# thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.001, W, 0.01, 0.001)
+# thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
+thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.001, 0.8, 0.01, 0.001)
+thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.001, 0.8, 0.01, 0.001)
+# thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.8, 0.01, 0.001)
+# thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.8, 0.01, 0.001)
 
 print(f"{errL}, {thetaL1}")
 print(f"{errR}, {thetaR1}")
