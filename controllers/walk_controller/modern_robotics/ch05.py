@@ -20,7 +20,7 @@ Optional library: matplotlib
 
 import numpy as np
 from modern_robotics.utils import *
-
+from modern_robotics.ch03 import *
 
 '''
 *** CHAPTER 5: VELOCITY KINEMATICS AND STATICS***

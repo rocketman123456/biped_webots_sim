@@ -20,7 +20,9 @@ Optional library: matplotlib
 
 import numpy as np
 from modern_robotics.utils import *
-
+from modern_robotics.ch03 import *
+from modern_robotics.ch04 import *
+from modern_robotics.ch05 import *
 
 '''
 *** CHAPTER 6: INVERSE KINEMATICS ***
@@ -243,7 +245,8 @@ def IKinBodyDampedLeastSquare1(Blist, M, T, thetalist0, lamb, W, eomg, ev):
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         J = JacobianBody(Blist, thetalist)
-        JJT = J.T @ W.T @ W @ J + lamb * np.eye(np.size(thetalist, 1))
+        JJT = W @ J @ J.T @ W + lamb * np.eye(thetalist.size)
+        # JJT = J.T @ W.T @ W @ J + lamb * np.eye(thetalist.size)
         thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W.T @ W @ Vb
         i = i + 1
         Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
@@ -259,7 +262,7 @@ def IKinSpaceDampedLeastSquare1(Slist, M, T, thetalist0, lamb, W, eomg, ev):
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
         J = JacobianSpace(Slist, thetalist)
-        JJT = J.T @ W.T @ W @ J + lamb * np.eye(np.size(thetalist, 1))
+        JJT = J.T @ W.T @ W @ J + lamb * np.eye(thetalist.size)
         thetalist = thetalist + np.linalg.pinv(JJT) @ J.T @ W.T @ W @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
@@ -276,8 +279,8 @@ def IKinBodyDampedLeastSquare2(Blist, M, T, thetalist0, lamb, W, dt, eomg, ev):
     err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     while err and i < maxiterations:
         J = JacobianBody(Blist, thetalist)
-        JJT = W @ J @ J.T @ W + lamb * np.eye(np.size(thetalist, 1))
-        thetalist = thetalist + dt * W @ J.T @ np.linalg.pinv(JJT) W @ Vb
+        JJT = W @ J @ J.T @ W + lamb * np.eye(thetalist.size)
+        thetalist = thetalist + dt * W @ J.T @ np.linalg.pinv(JJT) @ W @ Vb
         i = i + 1
         Vb = se3ToVec(MatrixLog6(np.dot(TransInv(FKinBody(M, Blist, thetalist)), T)))
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
@@ -292,8 +295,8 @@ def IKinSpaceDampedLeastSquare2(Slist, M, T, thetalist0, lamb, W, dt, eomg, ev):
     err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     while err and i < maxiterations:
         J = JacobianSpace(Slist, thetalist)
-        JJT = W @ J @ J.T @ W + lamb * np.eye(np.size(thetalist, 1))
-        thetalist = thetalist + dt * W @ J.T @ np.linalg.pinv(JJT) W @ Vs
+        JJT = W @ J @ J.T @ W + lamb * np.eye(thetalist.size)
+        thetalist = thetalist + dt * W @ J.T @ np.linalg.pinv(JJT) @ W @ Vs
         i = i + 1
         Tsb = FKinSpace(M, Slist, thetalist)
         Vs = np.dot(Adjoint(Tsb), se3ToVec(MatrixLog6(np.dot(TransInv(Tsb), T))))

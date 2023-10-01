@@ -66,10 +66,8 @@ motor_sim_R3 = MotorSim(motor_R3, sensor_R3, motor_R3_dir, timestep)
 motor_sim_R4 = MotorSim(motor_R4, sensor_R4, motor_R4_dir, timestep)
 motor_sim_R5 = MotorSim(motor_R5, sensor_R5, motor_R5_dir, timestep)
 
-motors = [
-    motor_sim_R1, motor_sim_R2, motor_sim_R3, motor_sim_R4, motor_sim_R5,
-    motor_sim_L1, motor_sim_L2, motor_sim_L3, motor_sim_L4, motor_sim_L5
-]
+motorsL = [motor_sim_L1, motor_sim_L2, motor_sim_L3, motor_sim_L4, motor_sim_L5]
+motorsR = [motor_sim_R1, motor_sim_R2, motor_sim_R3, motor_sim_R4, motor_sim_R5]
 
 ##############################################################################
 ##############################################################################
@@ -83,12 +81,10 @@ L3 = 0.045
 SL1 = np.array([1, 0, 0, 0, 0, 0])
 SL2 = np.array([0, 0, 1, 0, 0, 0])
 SL3 = np.array([0, 1, 0, 0, 0, 0])
-SL4 = np.array([0, 1, 0, 0, 0, 0])
-SL5 = np.array([0, 1, 0, 0, 0, 0])
+SL4 = np.array([0, 1, 0, 0, 0, L1])
+SL5 = np.array([0, 1, 0, 0, 0, L1+L2])
 
-SL = np.array([
-    SL1, SL2, SL3, SL4, SL5
-]).T
+SL = np.array([SL1, SL2, SL3, SL4, SL5]).T
 
 ML = np.array([
     [1, 0, 0, 0],
@@ -100,7 +96,7 @@ ML = np.array([
 TL = np.array([
     [1, 0, 0, 0],
     [0, 1, 0, 0],
-    [0, 0, 1, -0.2],
+    [0, 0, 1, -0.25],
     [0, 0, 0, 1]
 ])
 
@@ -109,12 +105,10 @@ thetaL = np.array([0, 0, -0.2, 0.4, -0.2])
 SR1 = np.array([1, 0, 0, 0, 0, 0])
 SR2 = np.array([0, 0, 1, 0, 0, 0])
 SR3 = np.array([0, 1, 0, 0, 0, 0])
-SR4 = np.array([0, 1, 0, 0, 0, 0])
-SR5 = np.array([0, 1, 0, 0, 0, 0])
+SR4 = np.array([0, 1, 0, 0, 0, L1])
+SR5 = np.array([0, 1, 0, 0, 0, L1+L2])
 
-SR = np.array([
-    SR1, SR2, SR3, SR4, SR5
-]).T
+SR = np.array([SR1, SR2, SR3, SR4, SR5]).T
 
 MR = np.array([
     [1, 0, 0, 0],
@@ -126,17 +120,38 @@ MR = np.array([
 TR = np.array([
     [1, 0, 0, 0],
     [0, 1, 0, 0],
-    [0, 0, 1, -0.2],
+    [0, 0, 1, -0.25],
     [0, 0, 0, 1]
 ])
 
 thetaR = np.array([0, 0, -0.2, 0.4, -0.2])
 
-thetaL1 = IKinSpaceDamped(SL, ML, TL, thetaL, 0.7, 0.01, 0.01)
-thetaR1 = IKinSpaceDamped(SR, MR, TR, thetaR, 0.7, 0.01, 0.01)
+W = np.array([
+    [1, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 1]
+]) * 0.8
 
-print(thetaL1)
-print(thetaR1)
+thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.3, 0.01, 0.001)
+thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.3, 0.01, 0.001)
+
+print(f"{errL}, {thetaL1}")
+print(f"{errR}, {thetaR1}")
+
+motor_sim_L3.setPosition(-0.4)
+motor_sim_L4.setPosition(0.8)
+motor_sim_L5.setPosition(-0.4)
+
+motor_sim_R3.setPosition(-0.4)
+motor_sim_R4.setPosition(0.8)
+motor_sim_R5.setPosition(-0.4)
+
+for i in range(5):
+    motorsL[i].setPosition(thetaL1[i])
+    motorsR[i].setPosition(thetaR1[i])
 
 ##############################################################################
 ##############################################################################
@@ -147,14 +162,6 @@ accelerometer.enable(timestep)
 
 gyro = robot.getDevice('gyro')
 gyro.enable(timestep)
-
-motor_sim_L3.setPosition(-0.4)
-motor_sim_L4.setPosition(0.8)
-motor_sim_L5.setPosition(-0.4)
-
-motor_sim_R3.setPosition(-0.4)
-motor_sim_R4.setPosition(0.8)
-motor_sim_R5.setPosition(-0.4)
 
 # z = 0.3
 
@@ -168,15 +175,7 @@ while robot.step(timestep) != -1:
     # Process sensor data here.
 
     # Enter here functions to send actuator commands, like:
-    motor_sim_L3.setPosition(-0.4)
-    motor_sim_L4.setPosition(0.8)
-    motor_sim_L5.setPosition(-0.4)
 
-    motor_sim_R3.setPosition(-0.4)
-    motor_sim_R4.setPosition(0.8)
-    motor_sim_R5.setPosition(-0.4)
-
-    # print(f"{motor_sim_L5.getTorque()}, {motor_sim_R5.getTorque()}")
     pass
 
 # Enter here exit cleanup code.
