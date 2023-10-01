@@ -68,6 +68,12 @@ motor_sim_R5 = MotorSim(motor_R5, sensor_R5, motor_R5_dir, timestep)
 motorsL = [motor_sim_L1, motor_sim_L2, motor_sim_L3, motor_sim_L4, motor_sim_L5]
 motorsR = [motor_sim_R1, motor_sim_R2, motor_sim_R3, motor_sim_R4, motor_sim_R5]
 
+accelerometer = robot.getDevice('accelerometer')
+accelerometer.enable(timestep)
+
+gyro = robot.getDevice('gyro')
+gyro.enable(timestep)
+
 ##############################################################################
 ##############################################################################
 ##############################################################################
@@ -92,13 +98,6 @@ ML = np.array([
     [0, 0, 0, 1]
 ])
 
-TL = np.array([
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, -0.3],
-    [0, 0, 0, 1]
-])
-
 thetaL = np.array([0, 0, -0.3, 0.6, -0.3])
 
 SR1 = np.array([1, 0, 0, 0, 0, 0])
@@ -116,13 +115,6 @@ MR = np.array([
     [0, 0, 0, 1]
 ])
 
-TR = np.array([
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, -0.3],
-    [0, 0, 0, 1]
-])
-
 thetaR = np.array([0, 0, -0.3, 0.6, -0.3])
 
 W = np.array([
@@ -134,48 +126,37 @@ W = np.array([
     [  0,   0,   0,   0,   0, 0.4]
 ])
 
-posL = FKinSpace(ML, SL, thetaL)
-posR = FKinSpace(MR, SR, thetaR)
-print(posL)
-print(posR)
+##############################################################################
+##############################################################################
+##############################################################################
 
-# thetaL1, errL = IKinSpace(SL, ML, TL, thetaL, 0.01, 0.001)
-# thetaR1, errR = IKinSpace(SR, MR, TR, thetaR, 0.01, 0.001)
-# thetaL1, errL = IKinSpacePseudoInverse(SL, ML, TL, thetaL, 0.01, 0.001)
-# thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
-thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.001, W, 0.01, 0.001)
-thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDampedLeastSquare2(SL, ML, TL, thetaL, 0.001, W, 0.1, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDampedLeastSquare2(SR, MR, TR, thetaR, 0.001, W, 0.1, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.001, 0.8, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.001, 0.8, 0.01, 0.001)
-# thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.5, 0.01, 0.001)
-# thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.5, 0.01, 0.001)
+legL = LegSim(SL, ML, thetaL, motorsL)
+legR = LegSim(SR, MR, thetaR, motorsR)
 
-print(f"{errL}, {thetaL1}")
-print(f"{errR}, {thetaR1}")
+z = 0.3
 
-posL = FKinSpace(ML, SL, thetaL1)
-posR = FKinSpace(MR, SR, thetaR1)
-print(posL)
-print(posR)
+TL = np.array([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, -z],
+    [0, 0, 0, 1]
+])
 
-for i in range(5):
-    motorsL[i].setPosition(thetaL1[i])
-    motorsR[i].setPosition(thetaR1[i])
+TR = np.array([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, -z],
+    [0, 0, 0, 1]
+])
 
 ##############################################################################
 ##############################################################################
 ##############################################################################
 
-accelerometer = robot.getDevice('accelerometer')
-accelerometer.enable(timestep)
+legL.position_control(TL)
+legR.position_control(TR)
 
-gyro = robot.getDevice('gyro')
-gyro.enable(timestep)
-
-# z = 0.3
-
+angle = 0
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
 while robot.step(timestep) != -1:
@@ -186,6 +167,23 @@ while robot.step(timestep) != -1:
     # Process sensor data here.
 
     # Enter here functions to send actuator commands, like:
+    angle += 0.1
+    TL = np.array([
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, -z + 0.1 * sin(angle)],
+        [0, 0, 0, 1]
+    ])
+
+    TR = np.array([
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, -z + 0.1 * sin(angle)],
+        [0, 0, 0, 1]
+    ])
+
+    legL.position_control(TL)
+    legR.position_control(TR)
 
     pass
 

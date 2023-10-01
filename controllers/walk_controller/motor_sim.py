@@ -9,20 +9,20 @@ class MotorSim():
         self.sensor.enable(step_size)
         self.motor.enableTorqueFeedback(step_size)
 
-    def setPosition(self, pos):
+    def set_position(self, pos):
         self.motor.setPosition(self.direction * pos)
 
-    def getPosition(self):
+    def get_position(self):
         return self.direction * self.sensor.getValue()
 
-    def getVelocity(self):
+    def get_velocity(self):
         return self.direction * self.motor.getVelocity()
 
-    def setVelocity(self, vel):
+    def set_velocity(self, vel):
         self.motor.setVelocity(self.direction * vel)
 
-    def getTorque(self):
+    def get_torque(self):
         return self.direction * self.motor.getTorqueFeedback()
 
-    def setTorque(self, tau):
+    def set_torque(self, tau):
         self.motor.setTorque(self.direction * tau)
