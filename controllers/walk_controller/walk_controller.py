@@ -167,6 +167,11 @@ TR = np.array([
 legL.position_control(TL)
 legR.position_control(TR)
 
+# wait a moment
+for i in range(100):
+    robot.step(timestep)
+
+count = 0
 angle = 0
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
@@ -176,9 +181,10 @@ while robot.step(timestep) != -1:
     w = gyro.getValues()
 
     # Process sensor data here.
+    angle += 0.1
+    count += 1
 
     # Enter here functions to send actuator commands, like:
-    angle += 0.1
     # TL = np.array([
     #     [1, 0, 0, 0],
     #     [0, 1, 0, 0],
@@ -193,8 +199,12 @@ while robot.step(timestep) != -1:
     #     [0, 0, 0, 1]
     # ])
 
-    legL.position_control(TL)
-    legR.position_control(TR)
+    if count < 100:
+        legL.torque_control(np.array([0, 0, 0, 0, 0, -15]).T)
+        legR.torque_control(np.array([0, 0, 0, 0, 0, -15]).T)
+    else:
+        legL.position_control(TL)
+        legR.position_control(TR)
 
     pass
 

@@ -1,5 +1,6 @@
 from controller import Robot
 
+
 class MotorSim():
 
     def __init__(self, motor, sensor, direction, step_size):

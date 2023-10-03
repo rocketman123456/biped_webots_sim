@@ -6,6 +6,7 @@ import sys
 from modern_robotics.ch04 import *
 from modern_robotics.ch06 import *
 
+
 class LegSim():
 
     def __init__(self, Slist, M, thetalist, motors):
@@ -16,14 +17,15 @@ class LegSim():
         self.dthetas = []
         self.ddthetas = []
         self.torques = []
+        self.Glist = []
         self.motors = motors
         self.W = np.array([
             [0.8,   0,   0,   0,   0,   0],
-            [  0, 0.8,   0,   0,   0,   0],
-            [  0,   0, 0.8,   0,   0,   0],
-            [  0,   0,   0, 0.6,   0,   0],
-            [  0,   0,   0,   0, 0.6,   0],
-            [  0,   0,   0,   0,   0, 0.6]
+            [0, 0.8,   0,   0,   0,   0],
+            [0,   0, 0.8,   0,   0,   0],
+            [0,   0,   0, 0.6,   0,   0],
+            [0,   0,   0,   0, 0.6,   0],
+            [0,   0,   0,   0,   0, 0.6]
         ])
         for i in range(len(self.motors)):
             self.motors[i].set_position(self.thetas[i])
@@ -38,12 +40,14 @@ class LegSim():
         return thetas
 
     def inverse_velocity(self, Vs):
-        # TODO
+        # Tsb = FKinSpace(M, Slist, thetalist)
+        # Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         dthetas = np.linalg.pinv(JacobianSpace(self.Slist, self.thetas)) @ Vs
         return dthetas
 
     def inverse_force(self, Fs):
-        # TODO
+        # Tsb = FKinSpace(M, Slist, thetalist)
+        # Vs = Adjoint(Tsb) @ se3ToVec(MatrixLog6(TransInv(Tsb) @ T))
         torques = JacobianSpace(self.Slist, self.thetas).T @ Fs
         return torques
 
@@ -52,10 +56,13 @@ class LegSim():
         for i in range(len(self.motors)):
             self.motors[i].set_position(self.thetas[i])
 
-    def velocity_control(self):
+    def velocity_control(self, Vs):
+        self.dthetas = self.inverse_velocity(Vs)
         for i in range(len(self.motors)):
             self.motors[i].set_velocity(self.dthetas[i])
 
-    def torque_control(self):
+    def torque_control(self, Fs):
+        self.torques = self.inverse_force(Fs)
+        print(self.torques)
         for i in range(len(self.motors)):
             self.motors[i].set_torque(self.torques[i])
