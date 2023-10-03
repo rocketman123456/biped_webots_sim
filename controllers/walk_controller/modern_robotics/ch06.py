@@ -279,7 +279,7 @@ def IKinSpaceDampedLeastSquare1(Slist, M, T, thetalist0, lamb, W, eomg, ev):
         err = np.linalg.norm([Vs[0], Vs[1], Vs[2]]) > eomg or np.linalg.norm([Vs[3], Vs[4], Vs[5]]) > ev
     return (thetalist, not err)
 
-
+# method with error
 def IKinBodyDampedLeastSquare2(Blist, M, T, thetalist0, lamb, W, dt, eomg, ev):
     # W = np.eye(np.size(thetalist, 1)) + (w-1) @ d @ d.T
     thetalist = np.array(thetalist0).copy()
@@ -296,7 +296,7 @@ def IKinBodyDampedLeastSquare2(Blist, M, T, thetalist0, lamb, W, dt, eomg, ev):
         err = np.linalg.norm([Vb[0], Vb[1], Vb[2]]) > eomg or np.linalg.norm([Vb[3], Vb[4], Vb[5]]) > ev
     return (thetalist, not err)
 
-
+# method with error
 def IKinSpaceDampedLeastSquare2(Slist, M, T, thetalist0, lamb, W, dt, eomg, ev):
     thetalist = np.array(thetalist0).copy()
     i = 0

@@ -20,6 +20,9 @@ Optional library: matplotlib
 
 import numpy as np
 from modern_robotics.utils import *
+from modern_robotics.ch03 import *
+from modern_robotics.ch04 import *
+from modern_robotics.ch05 import *
 
 '''
 *** CHAPTER 8: DYNAMICS OF OPEN CHAINS ***

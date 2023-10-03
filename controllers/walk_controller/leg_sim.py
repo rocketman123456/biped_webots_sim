@@ -13,7 +13,8 @@ class LegSim():
         self.Slist = Slist
         self.M = M
         self.thetas = thetalist
-        self.velcities = []
+        self.dthetas = []
+        self.ddthetas = []
         self.torques = []
         self.motors = motors
         self.W = np.array([
@@ -28,20 +29,23 @@ class LegSim():
             self.motors[i].set_position(self.thetas[i])
 
     def inverse_kinematics(self, T):
-        # thetaL1, errL = IKinSpace(SL, ML, TL, thetaL, 0.01, 0.001)
-        # thetaR1, errR = IKinSpace(SR, MR, TR, thetaR, 0.01, 0.001)
-        # thetaL1, errL = IKinSpacePseudoInverse(SL, ML, TL, thetaL, 0.01, 0.001)
-        # thetaR1, errR = IKinSpacePseudoInverse(SR, MR, TR, thetaR, 0.01, 0.001)
-        # thetaL1, errL = IKinSpaceDampedLeastSquare1(SL, ML, TL, thetaL, 0.001, W, 0.01, 0.001)
-        # thetaR1, errR = IKinSpaceDampedLeastSquare1(SR, MR, TR, thetaR, 0.001, W, 0.01, 0.001)
-        # thetaL1, errL = IKinSpaceDampedLeastSquare2(SL, ML, TL, thetaL, 0.001, W, 0.1, 0.01, 0.001)
-        # thetaR1, errR = IKinSpaceDampedLeastSquare2(SR, MR, TR, thetaR, 0.001, W, 0.1, 0.01, 0.001)
-        # thetaL1, errL = IKinSpaceDampedPseudoInverse(SL, ML, TL, thetaL, 0.001, 0.8, 0.01, 0.001)
-        # thetaR1, errR = IKinSpaceDampedPseudoInverse(SR, MR, TR, thetaR, 0.001, 0.8, 0.01, 0.001)
-        # thetaL1, errL = IKinSpaceDamped(SL, ML, TL, thetaL, 0.5, 0.01, 0.001)
-        # thetaR1, errR = IKinSpaceDamped(SR, MR, TR, thetaR, 0.5, 0.01, 0.001)
+        # thetas, result = IKinSpace(self.Slist, self.M, T, self.thetas, 0.01, 0.001)
+        # thetas, result = IKinSpacePseudoInverse(self.Slist, self.M, T, self.thetas, 0.01, 0.001)
+        # thetas, result = IKinSpaceDamped(self.Slist, self.M, T, self.thetas, 0.5, 0.01, 0.001)
+        # thetas, result = IKinSpaceDampedPseudoInverse(self.Slist, self.M, T, self.thetas, 0.001, 0.8, 0.01, 0.001)
         thetas, result = IKinSpaceDampedLeastSquare1(self.Slist, self.M, T, self.thetas, 0.001, self.W, 0.01, 0.001)
+        # thetas, result = IKinSpaceDampedLeastSquare2(self.Slist, self.M, T, self.thetas, 0.001, self.W, 0.1, 0.01, 0.001)
         return thetas
+
+    def inverse_velocity(self, Vs):
+        # TODO
+        dthetas = np.linalg.pinv(JacobianSpace(self.Slist, self.thetas)) @ Vs
+        return dthetas
+
+    def inverse_force(self, Fs):
+        # TODO
+        torques = JacobianSpace(self.Slist, self.thetas).T @ Fs
+        return torques
 
     def position_control(self, T):
         self.thetas = self.inverse_kinematics(T)
@@ -50,7 +54,7 @@ class LegSim():
 
     def velocity_control(self):
         for i in range(len(self.motors)):
-            self.motors[i].set_velocity(self.velcities[i])
+            self.motors[i].set_velocity(self.dthetas[i])
 
     def torque_control(self):
         for i in range(len(self.motors)):
