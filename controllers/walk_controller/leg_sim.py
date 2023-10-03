@@ -58,11 +58,12 @@ class LegSim():
 
     def velocity_control(self, Vs):
         self.dthetas = self.inverse_velocity(Vs)
+        # print(self.dthetas)
         for i in range(len(self.motors)):
             self.motors[i].set_velocity(self.dthetas[i])
 
-    def torque_control(self, Fs):
+    def force_control(self, Fs):
         self.torques = self.inverse_force(Fs)
-        print(self.torques)
+        # print(self.torques)
         for i in range(len(self.motors)):
             self.motors[i].set_torque(self.torques[i])

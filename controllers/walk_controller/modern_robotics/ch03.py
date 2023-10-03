@@ -19,6 +19,8 @@ Optional library: matplotlib
 '''
 
 import numpy as np
+import numba
+from numba import jit, njit, vectorize, int32, int64, float32, float64
 from modern_robotics.utils import *
 
 '''
@@ -26,6 +28,7 @@ from modern_robotics.utils import *
 '''
 
 
+@jit(nopython=True)
 def RotInv(R):
     """Inverts a rotation matrix
 
@@ -44,6 +47,7 @@ def RotInv(R):
     return np.array(R).T
 
 
+@jit(nopython=True)
 def VecToso3(omg):
     """Converts a 3-vector to an so(3) representation
 
@@ -62,6 +66,7 @@ def VecToso3(omg):
                      [-omg[1], omg[0],       0]])
 
 
+@jit(nopython=True)
 def so3ToVec(so3mat):
     """Converts an so(3) representation to a 3-vector
 
@@ -78,6 +83,7 @@ def so3ToVec(so3mat):
     return np.array([so3mat[2][1], so3mat[0][2], so3mat[1][0]])
 
 
+@jit(nopython=True)
 def AxisAng3(expc3):
     """Converts a 3-vector of exponential coordinates for rotation into
     axis-angle form
@@ -94,6 +100,7 @@ def AxisAng3(expc3):
     return (Normalize(expc3), np.linalg.norm(expc3))
 
 
+# @jit(nopython=True)
 def MatrixExp3(so3mat):
     """Computes the matrix exponential of a matrix in so(3)
 
@@ -118,6 +125,7 @@ def MatrixExp3(so3mat):
         return np.eye(3) + np.sin(theta) * omgmat + (1 - np.cos(theta)) * np.dot(omgmat, omgmat)
 
 
+# @jit(nopython=True)
 def MatrixLog3(R):
     """Computes the matrix logarithm of a rotation matrix
 
@@ -149,6 +157,7 @@ def MatrixLog3(R):
         return theta / 2.0 / np.sin(theta) * (R - np.array(R).T)
 
 
+# @jit(nopython=True)
 def RpToTrans(R, p):
     """Converts a rotation matrix and a position vector into homogeneous
     transformation matrix
@@ -168,9 +177,10 @@ def RpToTrans(R, p):
                   [0, 1,  0, 5],
                   [0, 0,  0, 1]])
     """
-    return np.r_[np.c_[R, p], [[0, 0, 0, 1]]]
+    return np.vstack((np.hstack((R, p)), [[0, 0, 0, 1]]))
 
 
+# @jit(nopython=True)
 def TransToRp(T):
     """Converts a homogeneous transformation matrix into a rotation matrix
     and position vector
@@ -190,10 +200,11 @@ def TransToRp(T):
                    [0, 1,  0]]),
          np.array([0, 0, 3]))
     """
-    T = np.array(T)
+    # T = np.array(T)
     return T[0: 3, 0: 3], T[0: 3, 3]
 
 
+# @jit(nopython=True)
 def TransInv(T):
     """Inverts a homogeneous transformation matrix
 
@@ -214,10 +225,13 @@ def TransInv(T):
                   [0,  0, 0,  1]])
     """
     R, p = TransToRp(T)
-    Rt = np.array(R).T
-    return np.r_[np.c_[Rt, -np.dot(Rt, p)], [[0, 0, 0, 1]]]
+    Rt = R.T
+    p = np.array([[p[0], p[1], p[2]]]).T
+    Rtp = -Rt @ p
+    return np.vstack((np.hstack((Rt, Rtp)), np.array([[0, 0, 0, 1]])))
 
 
+# @jit(nopython=True)
 def VecTose3(V):
     """Converts a spatial velocity vector into a 4x4 matrix in se3
 
@@ -235,6 +249,7 @@ def VecTose3(V):
     return np.r_[np.c_[VecToso3([V[0], V[1], V[2]]), [V[3], V[4], V[5]]], np.zeros((1, 4))]
 
 
+# @jit(nopython=True)
 def se3ToVec(se3mat):
     """ Converts an se3 matrix into a spatial velocity vector
 
@@ -253,6 +268,7 @@ def se3ToVec(se3mat):
                  [se3mat[0][3], se3mat[1][3], se3mat[2][3]]]
 
 
+# @jit(nopython=True)
 def Adjoint(T):
     """Computes the adjoint representation of a homogeneous transformation
     matrix
@@ -278,6 +294,7 @@ def Adjoint(T):
                  np.c_[np.dot(VecToso3(p), R), R]]
 
 
+# @jit(nopython=True)
 def ScrewToAxis(q, s, h):
     """Takes a parametric description of a screw axis and converts it to a
     normalized screw axis
@@ -297,6 +314,7 @@ def ScrewToAxis(q, s, h):
     return np.r_[s, np.cross(q, s) + np.dot(h, s)]
 
 
+# @jit(nopython=True)
 def AxisAng6(expc6):
     """Converts a 6-vector of exponential coordinates into screw axis-angle
     form
@@ -317,6 +335,7 @@ def AxisAng6(expc6):
     return (np.array(expc6 / theta), theta)
 
 
+# @jit(nopython=True)
 def MatrixExp6(se3mat):
     """Computes the matrix exponential of an se3 representation of
     exponential coordinates
@@ -350,6 +369,7 @@ def MatrixExp6(se3mat):
                      [[0, 0, 0, 1]]]
 
 
+# @jit(nopython=True)
 def MatrixLog6(T):
     """Computes the matrix logarithm of a homogeneous transformation matrix
 
@@ -370,16 +390,16 @@ def MatrixLog6(T):
     R, p = TransToRp(T)
     omgmat = MatrixLog3(R)
     if np.array_equal(omgmat, np.zeros((3, 3))):
-        return np.r_[np.c_[np.zeros((3, 3)), [T[0][3], T[1][3], T[2][3]]], [[0, 0, 0, 0]]]
+        return np.vstack((np.hstack((np.zeros((3, 3)), np.array([[T[0][3], T[1][3], T[2][3]]]).T)), np.array([[0, 0, 0, 0]])))
     else:
         theta = np.arccos((np.trace(R) - 1) / 2.0)
-        return np.r_[np.c_[omgmat,
-                           np.dot(np.eye(3) - omgmat / 2.0 \
-                                + (1.0 / theta - 1.0 / np.tan(theta / 2.0) / 2) \
-                                * np.dot(omgmat, omgmat) / theta,[T[0][3], T[1][3], T[2][3]])],
-                     [[0, 0, 0, 0]]]
+        mat = np.eye(3) - omgmat / 2.0 + (1.0 / theta - 1.0 / np.tan(theta / 2.0) / 2) * omgmat @ omgmat / theta
+        vec = np.array([[T[0][3], T[1][3], T[2][3]]]).T
+        temp = mat @ vec
+        return np.vstack((np.hstack((omgmat, temp)), np.array([[0, 0, 0, 0]])))
 
 
+# @jit(nopython=True)
 def ProjectToSO3(mat):
     """Returns a projection of mat into SO(3)
 
@@ -407,6 +427,7 @@ def ProjectToSO3(mat):
     return R
 
 
+# @jit(nopython=True)
 def ProjectToSE3(mat):
     """Returns a projection of mat into SE(3)
 
@@ -432,6 +453,7 @@ def ProjectToSE3(mat):
     return RpToTrans(ProjectToSO3(mat[:3, :3]), mat[:3, 3])
 
 
+# @jit(nopython=True)
 def DistanceToSO3(mat):
     """Returns the Frobenius norm to describe the distance of mat from the
     SO(3) manifold
@@ -457,6 +479,7 @@ def DistanceToSO3(mat):
         return 1e+9
 
 
+# @jit(nopython=True)
 def DistanceToSE3(mat):
     """Returns the Frobenius norm to describe the distance of mat from the
     SE(3) manifold
@@ -486,6 +509,7 @@ def DistanceToSE3(mat):
         return 1e+9
 
 
+# @jit(nopython=True)
 def TestIfSO3(mat):
     """Returns true if mat is close to or on the manifold SO(3)
 
@@ -507,6 +531,7 @@ def TestIfSO3(mat):
     return abs(DistanceToSO3(mat)) < 1e-3
 
 
+# @jit(nopython=True)
 def TestIfSE3(mat):
     """Returns true if mat is close to or on the manifold SE(3)
 

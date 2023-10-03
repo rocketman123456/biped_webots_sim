@@ -19,11 +19,14 @@ Optional library: matplotlib
 '''
 
 import numpy as np
+import numba
+from numba import njit
 
 '''
 *** BASIC HELPER FUNCTIONS ***
 '''
 
+@njit
 def NearZero(z):
     """Determines whether a scalar is small enough to be treated as zero
 
@@ -37,6 +40,8 @@ def NearZero(z):
     """
     return abs(z) < 1e-6
 
+
+@njit
 def Normalize(V):
     """Normalizes a vector
 

@@ -9,6 +9,11 @@ from motor_sim import *
 from leg_sim import *
 from state_etimation import *
 
+from numba import jit
+import numpy as np
+import time
+
+
 # create the Robot instance.
 robot = Robot()
 
@@ -200,8 +205,8 @@ while robot.step(timestep) != -1:
     # ])
 
     if count < 100:
-        legL.torque_control(np.array([0, 0, 0, 0, 0, -15]).T)
-        legR.torque_control(np.array([0, 0, 0, 0, 0, -15]).T)
+        legL.force_control(np.array([0, 0.3, 0, 0, 0, -20]).T)
+        legR.force_control(np.array([0, 0.3, 0, 0, 0, -20]).T)
     else:
         legL.position_control(TL)
         legR.position_control(TR)
