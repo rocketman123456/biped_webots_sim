@@ -28,7 +28,7 @@ from modern_robotics.utils import *
 '''
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def RotInv(R):
     """Inverts a rotation matrix
 
@@ -47,7 +47,7 @@ def RotInv(R):
     return np.array(R).T
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def VecToso3(omg):
     """Converts a 3-vector to an so(3) representation
 
@@ -66,7 +66,7 @@ def VecToso3(omg):
                      [-omg[1], omg[0],       0]])
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def so3ToVec(so3mat):
     """Converts an so(3) representation to a 3-vector
 
@@ -83,7 +83,7 @@ def so3ToVec(so3mat):
     return np.array([so3mat[2][1], so3mat[0][2], so3mat[1][0]])
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def AxisAng3(expc3):
     """Converts a 3-vector of exponential coordinates for rotation into
     axis-angle form
@@ -154,7 +154,8 @@ def MatrixLog3(R):
         return VecToso3(np.pi * omg)
     else:
         theta = np.arccos(acosinput)
-        return theta / 2.0 / np.sin(theta) * (R - np.array(R).T)
+        alpha = theta / 2.0 / np.sin(theta)
+        return alpha * (R - np.array(R).T)
 
 
 # @jit(nopython=True)
