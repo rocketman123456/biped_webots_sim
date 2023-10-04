@@ -5,7 +5,8 @@ import sys
 
 class BipedSim():
 
-    def __init__(self):
-        print()
-
-    
+    def __init__(self, legL, legR, acc, gyro):
+        self.legL = legL
+        self.legR = legR
+        self.acc = acc
+        self.gyro = gyro

@@ -20,8 +20,9 @@ robot = Robot()
 # get the time step of the current world.
 timestep = int(robot.getBasicTimeStep())
 
-# You should insert a getDevice-like function in order to get the
-# instance of a device of the robot. Something like:
+##############################################################################
+##############################################################################
+##############################################################################
 
 def motor_define():
     motor_L1 = robot.getDevice('Roll-L')
@@ -143,11 +144,17 @@ legL, legR = leg_define();
 ##############################################################################
 ##############################################################################
 
-accelerometer = robot.getDevice('accelerometer')
-accelerometer.enable(timestep)
+acc = robot.getDevice('accelerometer')
+acc.enable(timestep)
 
 gyro = robot.getDevice('gyro')
 gyro.enable(timestep)
+
+biped_sim = BipedSim(legL, legR, acc, gyro)
+
+##############################################################################
+##############################################################################
+##############################################################################
 
 z = 0.4
 
@@ -165,10 +172,6 @@ TR = np.array([
     [0, 0, 0, 1]
 ])
 
-##############################################################################
-##############################################################################
-##############################################################################
-
 legL.position_control(TL)
 legR.position_control(TR)
 
@@ -177,7 +180,6 @@ for i in range(100):
     robot.step(timestep)
 
 count = 0
-angle = 0
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
 while robot.step(timestep) != -1:
@@ -186,27 +188,16 @@ while robot.step(timestep) != -1:
     w = gyro.getValues()
 
     # Process sensor data here.
-    angle += 0.1
     count += 1
+    # count = count % 200
+    # TODO
+    w, v = biped_state_estimation()
 
     # Enter here functions to send actuator commands, like:
-    # TL = np.array([
-    #     [1, 0, 0, 0],
-    #     [0, 1, 0, 0],
-    #     [0, 0, 1, -z + 0.1 * sin(angle)],
-    #     [0, 0, 0, 1]
-    # ])
-
-    # TR = np.array([
-    #     [1, 0, 0, 0],
-    #     [0, 1, 0, 0],
-    #     [0, 0, 1, -z + 0.1 * sin(angle)],
-    #     [0, 0, 0, 1]
-    # ])
 
     if count < 100:
-        legL.force_control(np.array([0, 0.3, 0, 0, 0, -20]).T)
-        legR.force_control(np.array([0, 0.3, 0, 0, 0, -20]).T)
+        legL.force_control(np.array([0, 0.3, 0, 1, 0, -15]).T)
+        legR.force_control(np.array([0, 0.3, 0, 1, 0, -15]).T)
     else:
         legL.position_control(TL)
         legR.position_control(TR)
