@@ -18,7 +18,7 @@ TexturedBackgroundLight {
 RectangleArena {
   floorSize 10 10
 }
-Robot {
+DEF PAI-urdf Robot {
   translation 0 0 0.35
   children [
     Accelerometer {
@@ -495,4 +495,5 @@ Robot {
     ]
   }
   controller "walk_controller"
+  supervisor TRUE
 }

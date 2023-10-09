@@ -1,4 +1,4 @@
-from controller import Robot, Motor
+from controller import Robot, Motor, Supervisor, Node
 from math import *
 import numpy as np
 import sys
@@ -7,6 +7,7 @@ from modern_robotics.ch04 import *
 from modern_robotics.ch06 import *
 from motor_sim import *
 from leg_sim import *
+from biped_sim import *
 from state_etimation import *
 
 from numba import jit
@@ -15,7 +16,8 @@ import time
 
 
 # create the Robot instance.
-robot = Robot()
+# robot = Robot()
+robot = Supervisor()
 
 # get the time step of the current world.
 timestep = int(robot.getBasicTimeStep())
@@ -179,25 +181,37 @@ legR.position_control(TR)
 for i in range(100):
     robot.step(timestep)
 
+root = robot.getFromDef('PAI-urdf')
+# root = robot.getRoot()
+# print(root)
+# print(root.exportString())
+# print(root.getField("translation").getSFVec3f())
+# print(root.getField("rotation"))
+# print(root.getPosition())
+T = np.array(root.getPose()).reshape(4, 4)
+# print(root.getPose())
+print(T)
+
 count = 0
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
 while robot.step(timestep) != -1:
     # Read the sensors:
-    acc = accelerometer.getValues()
-    w = gyro.getValues()
+    # a = acc.getValues()
+    # w = gyro.getValues()
+    T = np.array(root.getPose()).reshape(4, 4)
 
     # Process sensor data here.
     count += 1
     # count = count % 200
     # TODO
-    w, v = biped_state_estimation()
+    biped_state_estimation(0, 0, legL, legR)
 
     # Enter here functions to send actuator commands, like:
 
     if count < 100:
-        legL.force_control(np.array([0, 0.3, 0, 1, 0, -15]).T)
-        legR.force_control(np.array([0, 0.3, 0, 1, 0, -15]).T)
+        legL.force_control(np.array([0, 0.3, 0, 0, 0, -15]).T)
+        legR.force_control(np.array([0, 0.3, 0, 0, 0, -15]).T)
     else:
         legL.position_control(TL)
         legR.position_control(TR)
