@@ -26,19 +26,25 @@ PROTO PAI-urdf [
     synchronization IS synchronization
     selfCollision IS selfCollision
     children [
+      Accelerometer {
+      }
+      Gyro {
+      }
       Shape {
         appearance DEF base_link_material PBRAppearance {
-          roughness 1.000000
+          roughness 1
           metalness 0
         }
         geometry DEF base_link Mesh {
-          url "meshes/base_link_opt.stl"
+          url [
+            "../protos/meshes/base_link.STL"
+          ]
         }
       }
       HingeJoint {
         jointParameters HingeJointParameters {
-          axis -1.000000 0.000000 0.000000
-          anchor 0.000000 0.075000 0.000000
+          axis -1 0 0
+          anchor 0 0.075 0
         }
         device [
           RotationalMotor {
@@ -50,21 +56,24 @@ PROTO PAI-urdf [
           }
         ]
         endPoint Solid {
-          translation 0.000000 0.075000 0.000000
+          translation 0 0.075 0
+          rotation -1 0 0 0
           children [
             Shape {
               appearance DEF left-hip-abad_material PBRAppearance {
-                roughness 1.000000
+                roughness 1
                 metalness 0
               }
               geometry DEF left-hip-abad Mesh {
-                url "meshes/left-hip-abad.STL"
+                url [
+                  "../protos/meshes/left-hip-abad.STL"
+                ]
               }
             }
             HingeJoint {
               jointParameters HingeJointParameters {
-                axis 0.000000 0.000000 1.000000
-                anchor 0.049000 0.000000 -0.000500
+                axis 0 0 1
+                anchor 0.049 0 -0.0005
               }
               device [
                 RotationalMotor {
@@ -76,20 +85,22 @@ PROTO PAI-urdf [
                 }
               ]
               endPoint Solid {
-                translation 0.049000 0.000000 -0.000500
+                translation 0.049 0 -0.0005
                 children [
                   Shape {
                     appearance DEF left-hip-yaw_material PBRAppearance {
-                      roughness 1.000000
+                      roughness 1
                       metalness 0
                     }
                     geometry DEF left-hip-yaw Mesh {
-                      url "meshes/left-hip-yaw.STL"
+                      url [
+                        "../protos/meshes/left-hip-yaw.STL"
+                      ]
                     }
                   }
                   HingeJoint {
                     jointParameters HingeJointParameters {
-                      axis 0.000000 1.000000 0.000000
+                      axis 0 1 0
                     }
                     device [
                       RotationalMotor {
@@ -101,20 +112,23 @@ PROTO PAI-urdf [
                       }
                     ]
                     endPoint Solid {
+                      rotation 0 1 0 0
                       children [
                         Shape {
                           appearance DEF left-hip-pitch_material PBRAppearance {
-                            roughness 1.000000
+                            roughness 1
                             metalness 0
                           }
                           geometry DEF left-hip-pitch Mesh {
-                            url "meshes/left-hip-pitch.STL"
+                            url [
+                              "../protos/meshes/left-hip-pitch.STL"
+                            ]
                           }
                         }
                         HingeJoint {
                           jointParameters HingeJointParameters {
-                            axis 0.000000 1.000000 0.000000
-                            anchor 0.000000 0.000000 -0.150000
+                            axis 0 1 0
+                            anchor 0 0 -0.15
                           }
                           device [
                             RotationalMotor {
@@ -126,21 +140,24 @@ PROTO PAI-urdf [
                             }
                           ]
                           endPoint Solid {
-                            translation 0.000000 0.000000 -0.150000
+                            translation 0 0 -0.15
+                            rotation 0 1 0 0
                             children [
                               Shape {
                                 appearance DEF left-knee_material PBRAppearance {
-                                  roughness 1.000000
+                                  roughness 1
                                   metalness 0
                                 }
                                 geometry DEF left-knee Mesh {
-                                  url "meshes/left-knee.STL"
+                                  url [
+                                    "../protos/meshes/left-knee.STL"
+                                  ]
                                 }
                               }
                               HingeJoint {
                                 jointParameters HingeJointParameters {
-                                  axis 0.000000 1.000000 0.000000
-                                  anchor 0.000000 0.000000 -0.160000
+                                  axis 0 1 0
+                                  anchor 0 0 -0.16
                                 }
                                 device [
                                   RotationalMotor {
@@ -152,15 +169,18 @@ PROTO PAI-urdf [
                                   }
                                 ]
                                 endPoint Solid {
-                                  translation 0.000000 0.000000 -0.160000
+                                  translation 0 0 -0.16
+                                  rotation 0 1 0 0
                                   children [
                                     Shape {
                                       appearance DEF left-ankle_material PBRAppearance {
-                                        roughness 1.000000
+                                        roughness 1
                                         metalness 0
                                       }
                                       geometry DEF left-ankle Mesh {
-                                        url "meshes/left-ankle.STL"
+                                        url [
+                                          "../protos/meshes/left-ankle.STL"
+                                        ]
                                       }
                                     }
                                   ]
@@ -168,11 +188,13 @@ PROTO PAI-urdf [
                                   boundingObject USE left-ankle
                                   physics Physics {
                                     density -1
-                                    mass 0.090000
-                                    centerOfMass [ 0.010818 -0.000000 -0.014672 ]
+                                    mass 0.09
+                                    centerOfMass [
+                                      0.010818 0 -0.014672
+                                    ]
                                     inertiaMatrix [
-                                      2.760000e-06 2.710700e-05 2.694200e-05
-                                      3.149800e-11 1.046500e-06 3.729700e-13
+                                      2.76e-06 2.7107e-05 2.6942e-05
+                                      3.1498e-11 1.0465e-06 3.7297e-13
                                     ]
                                   }
                                 }
@@ -182,11 +204,13 @@ PROTO PAI-urdf [
                             boundingObject USE left-knee
                             physics Physics {
                               density -1
-                              mass 0.360000
-                              centerOfMass [ -0.004596 0.012568 -0.063722 ]
+                              mass 0.36
+                              centerOfMass [
+                                -0.004596 0.012568 -0.063722
+                              ]
                               inertiaMatrix [
-                                1.194500e-04 1.225300e-04 2.003600e-05
-                                6.407700e-08 3.322500e-07 1.284400e-07
+                                0.00011945 0.00012253 2.0036e-05
+                                6.4077e-08 3.3225e-07 1.2844e-07
                               ]
                             }
                           }
@@ -196,11 +220,13 @@ PROTO PAI-urdf [
                       boundingObject USE left-hip-pitch
                       physics Physics {
                         density -1
-                        mass 0.200000
-                        centerOfMass [ 0.000000 0.000000 -0.057270 ]
+                        mass 0.2
+                        centerOfMass [
+                          0 0 -0.05727
+                        ]
                         inertiaMatrix [
-                          1.231800e-04 1.292600e-04 6.318600e-06
-                          3.962300e-20 -2.632400e-20 7.227100e-23
+                          0.00012318 0.00012926 6.3186e-06
+                          3.9623e-20 -2.6324e-20 7.2271e-23
                         ]
                       }
                     }
@@ -210,11 +236,13 @@ PROTO PAI-urdf [
                 boundingObject USE left-hip-yaw
                 physics Physics {
                   density -1
-                  mass 0.650000
-                  centerOfMass [ -0.000496 0.000000 0.003295 ]
+                  mass 0.65
+                  centerOfMass [
+                    -0.000496 0 0.003295
+                  ]
                   inertiaMatrix [
-                    6.775700e-05 6.858100e-05 6.791400e-05
-                    7.955200e-21 -6.395000e-07 9.134600e-21
+                    6.7757e-05 6.8581e-05 6.7914e-05
+                    7.9552e-21 -6.395e-07 9.1346e-21
                   ]
                 }
               }
@@ -224,19 +252,21 @@ PROTO PAI-urdf [
           boundingObject USE left-hip-abad
           physics Physics {
             density -1
-            mass 0.350000
-            centerOfMass [ 0.041409 0.000000 0.055119 ]
+            mass 0.35
+            centerOfMass [
+              0.041409 0 0.055119
+            ]
             inertiaMatrix [
-              3.684100e-05 3.883900e-05 3.627700e-05
-              -2.584000e-22 -6.216200e-07 -1.948200e-21
+              3.6841e-05 3.8839e-05 3.6277e-05
+              -2.584e-22 -6.2162e-07 -1.9482e-21
             ]
           }
         }
       }
       HingeJoint {
         jointParameters HingeJointParameters {
-          axis -1.000000 0.000000 0.000000
-          anchor 0.000000 -0.075000 0.000000
+          axis -1 0 0
+          anchor 0 -0.075 0
         }
         device [
           RotationalMotor {
@@ -248,21 +278,24 @@ PROTO PAI-urdf [
           }
         ]
         endPoint Solid {
-          translation 0.000000 -0.075000 0.000000
+          translation 0 -0.075 0
+          rotation -1 0 0 0
           children [
             Shape {
               appearance DEF right-hip-abad_material PBRAppearance {
-                roughness 1.000000
+                roughness 1
                 metalness 0
               }
               geometry DEF right-hip-abad Mesh {
-                url "meshes/right-hip-abad.STL"
+                url [
+                  "../protos/meshes/right-hip-abad.STL"
+                ]
               }
             }
             HingeJoint {
               jointParameters HingeJointParameters {
-                axis 0.000000 0.000000 1.000000
-                anchor 0.049000 0.000000 -0.000500
+                axis 0 0 1
+                anchor 0.049 0 -0.0005
               }
               device [
                 RotationalMotor {
@@ -274,20 +307,22 @@ PROTO PAI-urdf [
                 }
               ]
               endPoint Solid {
-                translation 0.049000 0.000000 -0.000500
+                translation 0.049 0 -0.0005
                 children [
                   Shape {
                     appearance DEF right-hip-yaw_material PBRAppearance {
-                      roughness 1.000000
+                      roughness 1
                       metalness 0
                     }
                     geometry DEF right-hip-yaw Mesh {
-                      url "meshes/right-hip-yaw.STL"
+                      url [
+                        "../protos/meshes/right-hip-yaw.STL"
+                      ]
                     }
                   }
                   HingeJoint {
                     jointParameters HingeJointParameters {
-                      axis 0.000000 -1.000000 0.000000
+                      axis 0 -1 0
                     }
                     device [
                       RotationalMotor {
@@ -299,20 +334,23 @@ PROTO PAI-urdf [
                       }
                     ]
                     endPoint Solid {
+                      rotation 0 -1 0 0
                       children [
                         Shape {
                           appearance DEF right-hip-pitch_material PBRAppearance {
-                            roughness 1.000000
+                            roughness 1
                             metalness 0
                           }
                           geometry DEF right-hip-pitch Mesh {
-                            url "meshes/right-hip-pitch.STL"
+                            url [
+                              "../protos/meshes/right-hip-pitch.STL"
+                            ]
                           }
                         }
                         HingeJoint {
                           jointParameters HingeJointParameters {
-                            axis 0.000000 -1.000000 0.000000
-                            anchor 0.000000 0.000000 -0.150000
+                            axis 0 -1 0
+                            anchor 0 0 -0.15
                           }
                           device [
                             RotationalMotor {
@@ -324,21 +362,24 @@ PROTO PAI-urdf [
                             }
                           ]
                           endPoint Solid {
-                            translation 0.000000 0.000000 -0.150000
+                            translation 0 0 -0.15
+                            rotation 0 -1 0 0
                             children [
                               Shape {
                                 appearance DEF right-knee_material PBRAppearance {
-                                  roughness 1.000000
+                                  roughness 1
                                   metalness 0
                                 }
                                 geometry DEF right-knee Mesh {
-                                  url "meshes/right-knee.STL"
+                                  url [
+                                    "../protos/meshes/right-knee.STL"
+                                  ]
                                 }
                               }
                               HingeJoint {
                                 jointParameters HingeJointParameters {
-                                  axis 0.000000 -1.000000 0.000000
-                                  anchor 0.000000 0.000000 -0.160000
+                                  axis 0 -1 0
+                                  anchor 0 0 -0.16
                                 }
                                 device [
                                   RotationalMotor {
@@ -350,15 +391,18 @@ PROTO PAI-urdf [
                                   }
                                 ]
                                 endPoint Solid {
-                                  translation 0.000000 0.000000 -0.160000
+                                  translation 0 0 -0.16
+                                  rotation 0 -1 0 0
                                   children [
                                     Shape {
                                       appearance DEF right-ankle_material PBRAppearance {
-                                        roughness 1.000000
+                                        roughness 1
                                         metalness 0
                                       }
                                       geometry DEF right-ankle Mesh {
-                                        url "meshes/right-ankle.STL"
+                                        url [
+                                          "../protos/meshes/right-ankle.STL"
+                                        ]
                                       }
                                     }
                                   ]
@@ -366,11 +410,13 @@ PROTO PAI-urdf [
                                   boundingObject USE right-ankle
                                   physics Physics {
                                     density -1
-                                    mass 0.090000
-                                    centerOfMass [ 0.010818 -0.000000 -0.014672 ]
+                                    mass 0.09
+                                    centerOfMass [
+                                      0.010818 0 -0.014672
+                                    ]
                                     inertiaMatrix [
-                                      2.760000e-06 2.710700e-05 2.694200e-05
-                                      3.149800e-11 1.046500e-06 3.729700e-13
+                                      2.76e-06 2.7107e-05 2.6942e-05
+                                      3.1498e-11 1.0465e-06 3.7297e-13
                                     ]
                                   }
                                 }
@@ -380,11 +426,13 @@ PROTO PAI-urdf [
                             boundingObject USE right-knee
                             physics Physics {
                               density -1
-                              mass 0.360000
-                              centerOfMass [ -0.004596 -0.012568 -0.063722 ]
+                              mass 0.36
+                              centerOfMass [
+                                -0.004596 -0.012568 -0.063722
+                              ]
                               inertiaMatrix [
-                                1.194500e-04 1.225300e-04 2.003600e-05
-                                -6.407700e-08 3.322500e-07 -1.284400e-07
+                                0.00011945 0.00012253 2.0036e-05
+                                -6.4077e-08 3.3225e-07 -1.2844e-07
                               ]
                             }
                           }
@@ -394,11 +442,13 @@ PROTO PAI-urdf [
                       boundingObject USE right-hip-pitch
                       physics Physics {
                         density -1
-                        mass 0.200000
-                        centerOfMass [ -0.000000 0.000000 -0.057270 ]
+                        mass 0.2
+                        centerOfMass [
+                          0 0 -0.05727
+                        ]
                         inertiaMatrix [
-                          1.231800e-04 1.292600e-04 6.318600e-06
-                          3.968100e-20 -3.290500e-21 2.887000e-20
+                          0.00012318 0.00012926 6.3186e-06
+                          3.9681e-20 -3.2905e-21 2.887e-20
                         ]
                       }
                     }
@@ -408,11 +458,13 @@ PROTO PAI-urdf [
                 boundingObject USE right-hip-yaw
                 physics Physics {
                   density -1
-                  mass 0.650000
-                  centerOfMass [ -0.000496 0.000000 0.003295 ]
+                  mass 0.65
+                  centerOfMass [
+                    -0.000496 0 0.003295
+                  ]
                   inertiaMatrix [
-                    6.775700e-05 6.858100e-05 6.791400e-05
-                    -1.463100e-21 -6.395000e-07 1.128300e-20
+                    6.7757e-05 6.8581e-05 6.7914e-05
+                    -1.4631e-21 -6.395e-07 1.1283e-20
                   ]
                 }
               }
@@ -422,11 +474,13 @@ PROTO PAI-urdf [
           boundingObject USE right-hip-abad
           physics Physics {
             density -1
-            mass 0.350000
-            centerOfMass [ 0.041409 -0.000000 0.055119 ]
+            mass 0.35
+            centerOfMass [
+              0.041409 0 0.055119
+            ]
             inertiaMatrix [
-              3.684100e-05 3.883900e-05 3.627700e-05
-              2.438600e-22 -6.216200e-07 -2.348000e-21
+              3.6841e-05 3.8839e-05 3.6277e-05
+              2.4386e-22 -6.2162e-07 -2.348e-21
             ]
           }
         }
